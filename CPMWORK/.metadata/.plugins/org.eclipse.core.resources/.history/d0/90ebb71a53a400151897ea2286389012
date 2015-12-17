@@ -1,0 +1,60 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+
+public class TravelAgency {
+
+	private ArrayList<Cruise> cruises;
+	private ArrayList<Ship> ships;
+
+	public TravelAgency() {
+		cruises = new ArrayList<>();
+		ships = new ArrayList<>();
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void readCruises(File file) throws IOException {
+		FileParser parser = new FileParser(file);
+		for (int index = 0; index < parser.getFileSize(); index++) {
+			String[] tokens = parser.processLine(index);
+			String codigoCrucero = tokens[0];
+			String zona= tokens[1];
+			String denominacion= tokens[2];
+			String puertoSalida=tokens[3];
+			String itinerario= tokens[4];
+			String descripcion=tokens[5];
+			boolean aptoMenores;
+			if (tokens[6]=="S"){
+				aptoMenores=true;
+			}
+			else{
+				aptoMenores=false;
+			}
+			int duration=Integer.parseInt(tokens[7]);
+			String[] fechasSalida=tokens[8].split("%");
+			String codigoBarco=tokens[9];
+			Ship barco=findBarco(codigoBarco);
+			Cruise crucero = new Cruise(codigoCrucero, zona, denominacion, puertoSalida, itinerario, descripcion,
+					aptoMenores, duration, fechasSalida, barco);
+			
+			cruises.add(crucero);
+		}
+	}
+
+	private Ship findBarco(String codigoBarco) {
+		for (Ship barco : ships){
+			if(barco.getCodigoBarco().equals(codigoBarco)){
+				return barco;
+			};
+		}
+		Ship barco=new Ship(codigoBarco);
+		ships.add(barco);
+		return barco;
+	}
+
+}

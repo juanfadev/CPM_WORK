@@ -1,0 +1,81 @@
+
+public class Ship {
+
+	private String codigoBarco;
+	private String denominacion;
+	private String descripcion;
+	private long numeroCamarotes;
+	private double precioCamarotes;
+	
+	
+	public String getCodigoBarco() {
+		return codigoBarco;
+	}
+
+
+	public void setCodigoBarco(String codigoBarco) {
+		this.codigoBarco = codigoBarco;
+	}
+
+
+	public String getDenominacion() {
+		return denominacion;
+	}
+
+
+	public void setDenominacion(String denominacion) {
+		this.denominacion = denominacion;
+	}
+
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
+
+	public long getNumeroCamarotes() {
+		return numeroCamarotes;
+	}
+
+
+	public void setNumeroCamarotes(long numeroCamarotes) {
+		this.numeroCamarotes = numeroCamarotes;
+	}
+
+
+	public double getPrecioCamarotes() {
+		return precioCamarotes;
+	}
+
+
+	public void setPrecioCamarotes(double precioCamarotes) {
+		this.precioCamarotes = precioCamarotes;
+	}
+
+
+	public Ship(String codigoBarco, String denominacion, String descripcion, long numeroCamarotes,
+			double precioCamarotes) {
+		super();
+		this.codigoBarco = codigoBarco;
+		this.denominacion = denominacion;
+		this.descripcion = descripcion;
+		this.numeroCamarotes = numeroCamarotes;
+		this.precioCamarotes = precioCamarotes;
+	}
+	
+	public Ship (String codigoBarco){
+		super();
+		this.codigoBarco=codigoBarco;
+		/*this.denominacion = null;
+		this.descripcion = null;
+		this.numeroCamarotes = 0;
+		this.precioCamarotes = 0;*/
+	}
+	
+	
+}

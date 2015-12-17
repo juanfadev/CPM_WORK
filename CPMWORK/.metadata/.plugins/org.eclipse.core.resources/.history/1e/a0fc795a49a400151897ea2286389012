@@ -1,0 +1,10 @@
+import java.io*;
+
+
+public class FileParser {
+
+	public FileParser(File file) throws FileNotFoundException {
+
+		BufferedReader reader = new BufferedReader(new FileReader(file));
+	}
+}

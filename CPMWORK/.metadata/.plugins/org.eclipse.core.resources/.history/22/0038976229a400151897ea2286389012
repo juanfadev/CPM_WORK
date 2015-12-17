@@ -1,0 +1,19 @@
+import java.util.Date;
+
+public class Cruise {
+
+	public final static boolean UNDER16=true;
+	public final static boolean NOTUNDER16=false;
+	
+	private String codigoCrucero;
+	private String zona;
+	private String denominación;
+	private String puertoSalida;
+	private String itinerario;
+	private String descripcion;
+	private boolean aptoMenores;
+	private int duration; //in days
+	private String[] fechasSalida;
+	private Ship barco;
+	
+}
