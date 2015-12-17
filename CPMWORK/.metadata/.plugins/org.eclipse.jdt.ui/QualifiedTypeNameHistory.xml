@@ -1,2 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<qualifiedTypeNameHistroy/>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="java.util.Date"/>
+<fullyQualifiedTypeName name="javax.swing.plaf.synth.SynthOptionPaneUI"/>
+<fullyQualifiedTypeName name="java.lang.Long"/>
+<fullyQualifiedTypeName name="TravelAgency"/>
+<fullyQualifiedTypeName name="Cruise"/>
+<fullyQualifiedTypeName name="java.io.BufferedReader"/>
+<fullyQualifiedTypeName name="FileReader"/>
+<fullyQualifiedTypeName name="java.io.FileReader"/>
+<fullyQualifiedTypeName name="FileParser"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="java.io.IOException"/>
+<fullyQualifiedTypeName name="AgencyReader"/>
+<fullyQualifiedTypeName name="javax.swing.text.html.HTMLEditorKit.Parser"/>
+<fullyQualifiedTypeName name="java.lang.Integer"/>
+<fullyQualifiedTypeName name="Ship"/>
+<fullyQualifiedTypeName name="logic.Cruise"/>
+<fullyQualifiedTypeName name="logic.Extra"/>
+<fullyQualifiedTypeName name="java.lang.String"/>
+<fullyQualifiedTypeName name="java.lang.Double"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="java.io.File"/>
+</qualifiedTypeNameHistroy>
