@@ -29,16 +29,13 @@ public class Pedido {
 		}
 	}
 
-	public double precioCamarotes(Cruise crucero) {
-		Ship barco = crucero.getBarco();
-		precioCamarotes = (barco.getPrecioCamDobExt() * camDobExt) + (barco.getPrecioCamDobInt() * camDobInt)
-				+ (barco.getPrecioCamFamExt() * camFamExt) + (barco.getPrecioCamFamInt() * camFamInt);
-		return precioCamarotes;
+	public double precioCamarotes(Cruise crucero){
+		crucero.getBarco().getPrecioCamDobExt()
 	}
 
 	public double precioExtras() {
 		for (Extra e : extras) {
-			precioExtras += e.getPrecio();
+			precioExtras+=e.getPrecio();
 		}
 		return precioExtras;
 	}

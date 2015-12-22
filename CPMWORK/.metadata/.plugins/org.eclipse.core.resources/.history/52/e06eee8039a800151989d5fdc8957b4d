@@ -2,8 +2,10 @@ package logic;
 
 import java.util.ArrayList;
 
-public class Pedido {
+import org.w3c.dom.UserDataHandler;
 
+public class Pedido {
+	
 	private int people;
 	private int menores;
 	private long camDobInt;
@@ -11,54 +13,31 @@ public class Pedido {
 	private long camFamInt;
 	private long camFamExt;
 	private long camaExtra;
+	private Ship barco;
 	private Cruise crucero;
 	private Usuario usuario;
-	private ArrayList<Extra> extras;
-	private double precioCamarotes;
-	private double precioExtras;
-
-	public Pedido() {
+	private ArrayList<Extra> extras; 
+	
+	public Pedido(){
 	}
-
-	public boolean personasCorrectas() {
-		long totalPeople = camDobExt * 2 + camDobInt * 2 + camFamExt * 5 + camFamInt * 5;
-		if (people < totalPeople) {
+	
+	public boolean personasCorrectas(){
+		long totalPeople= camDobExt*2 + camDobInt*2+camFamExt*5 + camFamInt*5;
+		if (people<totalPeople){
 			return true;
-		} else {
+		}
+		else {
 			return false;
 		}
-	}
-
-	public double precioCamarotes(Cruise crucero) {
-		Ship barco = crucero.getBarco();
-		precioCamarotes = (barco.getPrecioCamDobExt() * camDobExt) + (barco.getPrecioCamDobInt() * camDobInt)
-				+ (barco.getPrecioCamFamExt() * camFamExt) + (barco.getPrecioCamFamInt() * camFamInt);
-		return precioCamarotes;
-	}
-
-	public double precioExtras() {
-		for (Extra e : extras) {
-			precioExtras += e.getPrecio();
-		}
-		return precioExtras;
-	}
-
-	public void addExtra(Extra extra) {
-		extras.add(extra);
-	}
-
-	public void removeExtra(Extra extra) {
-		extras.remove(extra);
 	}
 
 	public int getPeople() {
 		return people;
 	}
 
-	public void addPeople(int people) {
-		this.people = this.people + people;
+	public void addPeople(int people){
+		this.people=this.people+people;
 	}
-
 	public void setPeople(int people) {
 		this.people = people;
 	}
@@ -111,6 +90,14 @@ public class Pedido {
 		this.camaExtra = camaExtra;
 	}
 
+	public Ship getBarco() {
+		return barco;
+	}
+
+	public void setBarco(Ship barco) {
+		this.barco = barco;
+	}
+
 	public Cruise getCrucero() {
 		return crucero;
 	}
@@ -126,5 +113,8 @@ public class Pedido {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
+	
+	
 
+	
 }
