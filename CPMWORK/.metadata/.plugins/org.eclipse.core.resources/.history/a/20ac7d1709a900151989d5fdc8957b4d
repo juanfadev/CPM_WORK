@@ -203,7 +203,6 @@ public class VentanaInicio extends JFrame {
 		catalogo.setDescuento(descuento);
 	}
 	private void saveDatabases(){
-		//Save catalog to files
-		//Save registro to files
+		
 	}
 }

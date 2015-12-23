@@ -130,8 +130,4 @@ public class Pedido {
 		this.usuario = usuario;
 	}
 
-	public long getCodigoPedido() {
-		return codigoPedido;
-	}
-
 }

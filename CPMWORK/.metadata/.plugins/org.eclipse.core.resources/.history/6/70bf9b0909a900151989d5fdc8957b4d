@@ -202,8 +202,4 @@ public class VentanaInicio extends JFrame {
 		int [] descuento = {random.nextInt(),random.nextInt()};
 		catalogo.setDescuento(descuento);
 	}
-	private void saveDatabases(){
-		//Save catalog to files
-		//Save registro to files
-	}
 }
