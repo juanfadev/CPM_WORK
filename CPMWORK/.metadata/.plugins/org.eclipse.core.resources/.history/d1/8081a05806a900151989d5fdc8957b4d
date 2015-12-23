@@ -1,0 +1,176 @@
+package igu;
+
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+import logic.Catalog;
+
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import javax.swing.JToggleButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.CardLayout;
+
+public class VentanaInicio extends JFrame {
+
+	private JPanel pnPrincipal;
+	private JPanel pnPasos;
+	private JToggleButton tglbtnHome;
+	private JToggleButton tglbtnRooms;
+	private JToggleButton tglbtnPersonalData;
+	private JToggleButton tglbtnConfirmation;
+	private JToggleButton tglbtnPayout;
+	private JPanel pnCentral;
+	private JToggleButton tglbtnSearch;
+	private JPanel panel;
+	
+	
+	private Catalog catalogo;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					VentanaInicio frame = new VentanaInicio();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public VentanaInicio() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 553, 329);
+		pnPrincipal = new JPanel();
+		pnPrincipal.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(pnPrincipal);
+		pnPrincipal.setLayout(new BorderLayout(0, 0));
+		pnPrincipal.add(getPnPasos(), BorderLayout.NORTH);
+		pnPrincipal.add(getPnCentral(), BorderLayout.CENTER);
+	}
+
+	private JPanel getPnPasos() {
+		if (pnPasos == null) {
+			pnPasos = new JPanel();
+			pnPasos.setLayout(new GridLayout(1, 0, 0, 0));
+			pnPasos.add(getTglbtnHome());
+			pnPasos.add(getTglbtnSearch());
+			pnPasos.add(getTglbtnRooms());
+			pnPasos.add(getTglbtnPersonalData());
+			pnPasos.add(getTglbtnConfirmation());
+			pnPasos.add(getTglbtnPayout());
+		}
+		return pnPasos;
+	}
+
+	private JToggleButton getTglbtnHome() {
+		if (tglbtnHome == null) {
+			tglbtnHome = new JToggleButton("Home");
+			tglbtnHome.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					toggleAllButtons(tglbtnHome);
+				}
+			});
+		}
+		return tglbtnHome;
+	}
+
+	private JToggleButton getTglbtnRooms() {
+		if (tglbtnRooms == null) {
+			tglbtnRooms = new JToggleButton("Rooms");
+			tglbtnRooms.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					toggleAllButtons(tglbtnRooms);
+				}
+			});
+		}
+		return tglbtnRooms;
+	}
+
+	private JToggleButton getTglbtnPersonalData() {
+		if (tglbtnPersonalData == null) {
+			tglbtnPersonalData = new JToggleButton("Personal Data");
+			tglbtnPersonalData.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					toggleAllButtons(tglbtnPersonalData);
+				}
+			});
+		}
+		return tglbtnPersonalData;
+	}
+
+	private JToggleButton getTglbtnConfirmation() {
+		if (tglbtnConfirmation == null) {
+			tglbtnConfirmation = new JToggleButton("Confirmation");
+			tglbtnConfirmation.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					toggleAllButtons(tglbtnConfirmation);
+				}
+			});
+		}
+		return tglbtnConfirmation;
+	}
+
+	private JToggleButton getTglbtnPayout() {
+		if (tglbtnPayout == null) {
+			tglbtnPayout = new JToggleButton("Payout");
+			tglbtnPayout.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					toggleAllButtons(tglbtnPayout);
+				}
+			});
+		}
+		return tglbtnPayout;
+	}
+
+	private JToggleButton getTglbtnSearch() {
+		if (tglbtnSearch == null) {
+			tglbtnSearch = new JToggleButton("Search");
+			tglbtnSearch.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					toggleAllButtons(tglbtnSearch);
+				}
+			});
+		}
+		return tglbtnSearch;
+	}
+
+	private JPanel getPnCentral() {
+		if (pnCentral == null) {
+			pnCentral = new JPanel();
+			pnCentral.setLayout(new CardLayout(0, 0));
+			pnCentral.add(getPanel(), "name_503657931263631");
+		}
+		return pnCentral;
+	}
+
+	private void toggleAllButtons(JToggleButton este) {
+		for (Component c : pnPasos.getComponents()) {
+			JToggleButton boton = (JToggleButton) c;
+			if (este != boton) {
+				boton.setSelected(false);
+			}
+		}
+		este.setSelected(true);
+	}
+	private JPanel getPanel() {
+		if (panel == null) {
+			panel = new JPanel();
+		}
+		return panel;
+	}
+}

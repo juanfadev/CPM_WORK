@@ -1,0 +1,14 @@
+package logic;
+
+import java.util.ArrayList;
+
+public class Registro {
+
+	private ArrayList<Usuario> users;
+	
+	public void addUser(Usuario user){
+		users.add(user);
+	}
+	
+	
+}

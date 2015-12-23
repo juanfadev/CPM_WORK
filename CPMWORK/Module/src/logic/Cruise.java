@@ -15,6 +15,7 @@ public class Cruise {
 	private int duration; // in days
 	private String[] fechasSalida;
 	private Ship barco;
+	private boolean descuento;
 
 	public Cruise(String codigoCrucero, String zona, String denominacion, String puertoSalida, String itinerario,
 			String descripcion, boolean aptoMenores, int duration, String[] fechasSalida, Ship barco) {
@@ -110,11 +111,22 @@ public class Cruise {
 	public void setDenominacion(String denominacion) {
 		this.denominacion = denominacion;
 	}
+	
+	public boolean isDescuento() {
+		return descuento;
+	}
+
+	public void setDescuento(boolean descuento) {
+		this.descuento = descuento;
+	}
+	
 	/*
 	/////////////////////////////////////////
 	//END SETTERS AND GETTERS////////////////
 	/////////////////////////////////////////
 	*/
+
+
 	
 	
 }

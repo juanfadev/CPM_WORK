@@ -8,15 +8,17 @@ public class Catalog {
 	private ArrayList<Cruise> cruises;
 	private ArrayList<Ship> ships;
 	private ArrayList<Extra> extras;
+	private int [] descuento;
 
 	public Catalog() {
 		cruises = new ArrayList<>();
 		ships = new ArrayList<>();
 		extras = new ArrayList<>();
-	}
-
-	public static void main(String[] args) {
-
+		try {
+			start();
+		} catch (IOException e) {
+			System.out.print("Database could not be loaded. ERROR: " + e);
+		}
 	}
 
 	public void start() throws IOException {
@@ -100,5 +102,14 @@ public class Catalog {
 		ships.add(barco);
 		return barco;
 	}
+	
+	public int [] getDescuento() {
+		return descuento;
+	}
+
+	public void setDescuento(int [] descuento) {
+		this.descuento = descuento;
+	}
+
 
 }

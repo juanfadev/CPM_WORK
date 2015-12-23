@@ -1,9 +1,11 @@
 package logic;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Pedido {
 
+	private long codigoPedido;
 	private int people;
 	private int menores;
 	private long camDobInt;
@@ -18,6 +20,7 @@ public class Pedido {
 	private double precioExtras;
 
 	public Pedido() {
+		codigoPedido= new Random().nextLong();
 	}
 
 	public boolean personasCorrectas() {
