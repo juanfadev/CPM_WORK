@@ -1,0 +1,506 @@
+package igu;
+
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+import logic.Catalog;
+import logic.Pedido;
+
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import javax.swing.JToggleButton;
+import java.awt.event.ActionListener;
+import java.util.Locale;
+import java.util.Random;
+import java.awt.event.ActionEvent;
+import java.awt.CardLayout;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JComboBox;
+import javax.swing.JButton;
+import javax.swing.SwingConstants;
+import javax.swing.ToolTipManager;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.KeyStroke;
+import java.awt.event.KeyEvent;
+import java.awt.event.InputEvent;
+import javax.swing.JTabbedPane;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
+
+public class VentanaInicio extends JFrame {
+
+	private JPanel pnPrincipal;
+	private JPanel pnPasos;
+	private JToggleButton tglbtnHome;
+	private JToggleButton tglbtnRooms;
+	private JToggleButton tglbtnPersonalData;
+	private JToggleButton tglbtnConfirmation;
+	private JToggleButton tglbtnPayout;
+	private JPanel pnCentral;
+	private JToggleButton tglbtnSearch;
+	private JPanel pnHome;
+
+	private Catalog catalogo;
+	private Pedido pedido;
+	private JPanel pnSearch;
+	private JPanel pnRooms;
+	private JPanel pnConfirmation;
+	private JPanel pnDetails;
+	private JPanel pnSearchDet;
+	private JPanel pnTable;
+	private JPanel pnSearchBut;
+	private JLabel lblFrom;
+	private JTextField txtDateFrom;
+	private JLabel lblTo;
+	private JTextField txtDateTo;
+	private JLabel lblDestination;
+	private JComboBox cbDest;
+	private JButton btnSearch;
+	private JButton btnDetails;
+	private JMenuBar menuBar;
+	private JMenu mnFile;
+	private JMenu mnEdit;
+	private JMenu mnHelp;
+	private JMenuItem menuItem;
+	private JCheckBoxMenuItem chckbxmntmTooltips;
+	private JMenuItem mntmRestart;
+	private JTabbedPane tpDetails;
+	private JPanel pnPictures;
+	private JPanel pnInfo;
+	private Locale localizacion= Locale.getDefault(Locale.Category.FORMAT);
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					VentanaInicio frame = new VentanaInicio();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public VentanaInicio() {
+		catalogo = new Catalog(localizacion);
+		pedido = new Pedido();
+		restart();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 553, 329);
+		setJMenuBar(getMenuBar_1());
+		pnPrincipal = new JPanel();
+		pnPrincipal.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(pnPrincipal);
+		pnPrincipal.setLayout(new BorderLayout(0, 0));
+		pnPrincipal.add(getPnPasos(), BorderLayout.NORTH);
+		pnPrincipal.add(getPnCentral(), BorderLayout.CENTER);
+
+	}
+
+	private JPanel getPnPasos() {
+		if (pnPasos == null) {
+			pnPasos = new JPanel();
+			pnPasos.setLayout(new GridLayout(1, 0, 0, 0));
+			pnPasos.add(getTglbtnHome());
+			pnPasos.add(getTglbtnSearch());
+			pnPasos.add(getTglbtnRooms());
+			pnPasos.add(getTglbtnPersonalData());
+			pnPasos.add(getTglbtnConfirmation());
+			pnPasos.add(getTglbtnPayout());
+		}
+		return pnPasos;
+	}
+
+	private JToggleButton getTglbtnHome() {
+		if (tglbtnHome == null) {
+			tglbtnHome = new JToggleButton("Home");
+			tglbtnHome.setMnemonic('h');
+			tglbtnHome.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					toggleAllButtons(tglbtnHome);
+					((CardLayout) pnCentral.getLayout()).show(pnCentral, "panelHome");
+				}
+			});
+		}
+		return tglbtnHome;
+	}
+
+	private JToggleButton getTglbtnRooms() {
+		if (tglbtnRooms == null) {
+			tglbtnRooms = new JToggleButton("Rooms");
+			tglbtnRooms.setMnemonic('r');
+			tglbtnRooms.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					toggleAllButtons(tglbtnRooms);
+					((CardLayout) pnCentral.getLayout()).show(pnCentral, "panelRooms");
+				}
+			});
+		}
+		return tglbtnRooms;
+	}
+
+	private JToggleButton getTglbtnPersonalData() {
+		if (tglbtnPersonalData == null) {
+			tglbtnPersonalData = new JToggleButton("Personal Data");
+			tglbtnPersonalData.setMnemonic('r');
+			tglbtnPersonalData.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					toggleAllButtons(tglbtnPersonalData);
+					((CardLayout) pnCentral.getLayout()).show(pnCentral, "panelPersonalData");
+				}
+			});
+		}
+		return tglbtnPersonalData;
+	}
+
+	private JToggleButton getTglbtnConfirmation() {
+		if (tglbtnConfirmation == null) {
+			tglbtnConfirmation = new JToggleButton("Confirmation");
+			tglbtnConfirmation.setMnemonic('c');
+			tglbtnConfirmation.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					toggleAllButtons(tglbtnConfirmation);
+					((CardLayout) pnCentral.getLayout()).show(pnCentral, "panelConfirmation");
+				}
+			});
+		}
+		return tglbtnConfirmation;
+	}
+
+	private JToggleButton getTglbtnPayout() {
+		if (tglbtnPayout == null) {
+			tglbtnPayout = new JToggleButton("Payout");
+			tglbtnPayout.setMnemonic('p');
+			tglbtnPayout.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					toggleAllButtons(tglbtnPayout);
+					((CardLayout) pnCentral.getLayout()).show(pnCentral, "panelPayout");
+				}
+			});
+		}
+		return tglbtnPayout;
+	}
+
+	private JToggleButton getTglbtnSearch() {
+		if (tglbtnSearch == null) {
+			tglbtnSearch = new JToggleButton("Search");
+			tglbtnSearch.setMnemonic('s');
+			tglbtnSearch.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					toggleAllButtons(tglbtnSearch);
+					((CardLayout) pnCentral.getLayout()).show(pnCentral, "panelSearch");
+				}
+			});
+		}
+		return tglbtnSearch;
+	}
+
+	private JPanel getPnCentral() {
+		if (pnCentral == null) {
+			pnCentral = new JPanel();
+			pnCentral.setLayout(new CardLayout(0, 0));
+			pnCentral.add(getPnHome(), "panelHome");
+			pnCentral.add(getPnSearch(), "panelSearch");
+			pnCentral.add(getPnDetails(), "panelDetails");
+			pnCentral.add(getPnRooms(), "panelRooms");
+			pnCentral.add(getPnConfirmation(), "panelConfirmation");
+		}
+		return pnCentral;
+	}
+
+	private JPanel getPnHome() {
+		if (pnHome == null) {
+			pnHome = new JPanel();
+		}
+		return pnHome;
+	}
+
+	/*
+	 * METHODS METHODS METHODS METHODS METHODS
+	 */
+
+	private void restart() {
+		selectDescuento();
+	}
+
+	private void toggleAllButtons(JToggleButton este) {
+		for (Component c : pnPasos.getComponents()) {
+			JToggleButton boton = (JToggleButton) c;
+			if (este != boton) {
+				boton.setSelected(false);
+			}
+		}
+		este.setSelected(true);
+	}
+
+	private void selectDescuento() {
+		Random random = new Random();
+		int[] descuento = { random.nextInt(), random.nextInt() };
+		catalogo.setDescuento(descuento);
+	}
+
+	private void saveDatabases() {
+		// Save catalog to files
+		// Save registro to files
+	}
+
+	/*
+	 * private void addRows() { Object[] nuevaFila = new Object[4]; for (Mansion
+	 * mansion : inmobiliaria.getRelacionMansiones()) { if ((norte &&
+	 * mansion.getZona().equals("Norte"))||(centro&&mansion.getZona().equals(
+	 * "Centro"))||(sur && mansion.getZona().equals("Sur"))) {
+	 * 
+	 * nuevaFila[0] = mansion.getCodigo(); nuevaFila[1] = mansion.getZona();
+	 * nuevaFila[2] = mansion.getLocalidad(); nuevaFila[3] =
+	 * mansion.getPrecio();
+	 * 
+	 * modeloTabla.addRow(nuevaFila); } } }
+	 */
+	/*
+	 * 
+	 * METHODS METHODS METHODS
+	 */
+	private JPanel getPnSearch() {
+		if (pnSearch == null) {
+			pnSearch = new JPanel();
+			pnSearch.setLayout(new BorderLayout(0, 0));
+			pnSearch.add(getPnSearchDet(), BorderLayout.NORTH);
+			pnSearch.add(getPnTable(), BorderLayout.CENTER);
+			pnSearch.add(getPnSearchBut(), BorderLayout.SOUTH);
+		}
+		return pnSearch;
+	}
+
+	private JPanel getPnRooms() {
+		if (pnRooms == null) {
+			pnRooms = new JPanel();
+		}
+		return pnRooms;
+	}
+
+	private JPanel getPnConfirmation() {
+		if (pnConfirmation == null) {
+			pnConfirmation = new JPanel();
+		}
+		return pnConfirmation;
+	}
+
+	private JPanel getPnDetails() {
+		if (pnDetails == null) {
+			pnDetails = new JPanel();
+			pnDetails.setLayout(new BorderLayout(0, 0));
+			pnDetails.add(getTpDetails());
+		}
+		return pnDetails;
+	}
+
+	private JPanel getPnSearchDet() {
+		if (pnSearchDet == null) {
+			pnSearchDet = new JPanel();
+			pnSearchDet.add(getLblFrom());
+			pnSearchDet.add(getTxtDateFrom());
+			pnSearchDet.add(getLblTo());
+			pnSearchDet.add(getTxtDateTo());
+			pnSearchDet.add(getLblDestination());
+			pnSearchDet.add(getCbDest());
+			pnSearchDet.add(getBtnSearch());
+		}
+		return pnSearchDet;
+	}
+
+	private JPanel getPnTable() {
+		if (pnTable == null) {
+			pnTable = new JPanel();
+		}
+		return pnTable;
+	}
+
+	private JPanel getPnSearchBut() {
+		if (pnSearchBut == null) {
+			pnSearchBut = new JPanel();
+			pnSearchBut.add(getBtnDetails());
+		}
+		return pnSearchBut;
+	}
+
+	private JLabel getLblFrom() {
+		if (lblFrom == null) {
+			lblFrom = new JLabel("From: ");
+		}
+		return lblFrom;
+	}
+
+	private JTextField getTxtDateFrom() {
+		if (txtDateFrom == null) {
+			txtDateFrom = new JTextField();
+			txtDateFrom.setColumns(10);
+		}
+		return txtDateFrom;
+	}
+
+	private JLabel getLblTo() {
+		if (lblTo == null) {
+			lblTo = new JLabel("To: ");
+		}
+		return lblTo;
+	}
+
+	private JTextField getTxtDateTo() {
+		if (txtDateTo == null) {
+			txtDateTo = new JTextField();
+			txtDateTo.setColumns(10);
+		}
+		return txtDateTo;
+	}
+
+	private JLabel getLblDestination() {
+		if (lblDestination == null) {
+			lblDestination = new JLabel("Destination: ");
+		}
+		return lblDestination;
+	}
+
+	private JComboBox getCbDest() {
+		if (cbDest == null) {
+			cbDest = new JComboBox();
+			cbDest.setModel(new DefaultComboBoxModel(catalogo.getZonas().toArray()));
+		}
+		return cbDest;
+	}
+
+	private JButton getBtnSearch() {
+		if (btnSearch == null) {
+			btnSearch = new JButton("Search");
+			btnSearch.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					loadModel(catalogo.searchZonaDate(getTxtDateFrom().getText(), getTxtDateTo().getText(), getCbDest().getSelectedItem().toString()));
+				}
+			});
+		}
+		return btnSearch;
+	}
+
+	private JButton getBtnDetails() {
+		if (btnDetails == null) {
+			btnDetails = new JButton("Details");
+			btnDetails.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					((CardLayout) pnCentral.getLayout()).show(pnCentral, "panelDetails");
+				}
+			});
+			btnDetails.setHorizontalAlignment(SwingConstants.RIGHT);
+		}
+		return btnDetails;
+	}
+
+	private JMenuBar getMenuBar_1() {
+		if (menuBar == null) {
+			menuBar = new JMenuBar();
+			menuBar.add(getMnFile());
+			menuBar.add(getMnEdit());
+			menuBar.add(getMnHelp());
+		}
+		return menuBar;
+	}
+
+	private JMenu getMnFile() {
+		if (mnFile == null) {
+			mnFile = new JMenu("File");
+			mnFile.setMnemonic('f');
+			mnFile.add(getMntmRestart());
+		}
+		return mnFile;
+	}
+
+	private JMenu getMnEdit() {
+		if (mnEdit == null) {
+			mnEdit = new JMenu("Edit");
+			mnEdit.setMnemonic('d');
+			mnEdit.add(getChckbxmntmTooltips());
+			mnEdit.add(getMenuItem());
+		}
+		return mnEdit;
+	}
+
+	private JMenu getMnHelp() {
+		if (mnHelp == null) {
+			mnHelp = new JMenu("Help");
+			mnHelp.setMnemonic('h');
+		}
+		return mnHelp;
+	}
+
+	private JMenuItem getMenuItem() {
+		if (menuItem == null) {
+			menuItem = new JMenuItem("New menu item");
+		}
+		return menuItem;
+	}
+
+	private JCheckBoxMenuItem getChckbxmntmTooltips() {
+		if (chckbxmntmTooltips == null) {
+			chckbxmntmTooltips = new JCheckBoxMenuItem("Tooltips");
+			chckbxmntmTooltips.addChangeListener(new ChangeListener() {
+				public void stateChanged(ChangeEvent arg0) {
+					if (chckbxmntmTooltips.isSelected()) {
+						ToolTipManager.sharedInstance().setEnabled(true);
+					} else {
+						ToolTipManager.sharedInstance().setEnabled(false);
+					}
+
+				}
+			});
+			chckbxmntmTooltips.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.CTRL_MASK));
+			chckbxmntmTooltips.setSelected(true);
+		}
+		return chckbxmntmTooltips;
+	}
+
+	private JMenuItem getMntmRestart() {
+		if (mntmRestart == null) {
+			mntmRestart = new JMenuItem("Restart");
+			mntmRestart.setMnemonic('r');
+		}
+		return mntmRestart;
+	}
+
+	private JTabbedPane getTpDetails() {
+		if (tpDetails == null) {
+			tpDetails = new JTabbedPane(JTabbedPane.TOP);
+			tpDetails.addTab("Pictures", null, getPnPictures(), null);
+			tpDetails.addTab("Information", null, getPnInfo(), null);
+		}
+		return tpDetails;
+	}
+
+	private JPanel getPnPictures() {
+		if (pnPictures == null) {
+			pnPictures = new JPanel();
+		}
+		return pnPictures;
+	}
+
+	private JPanel getPnInfo() {
+		if (pnInfo == null) {
+			pnInfo = new JPanel();
+		}
+		return pnInfo;
+	}
+}

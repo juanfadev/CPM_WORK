@@ -18,9 +18,11 @@ public class Pedido {
 	private ArrayList<Extra> extras;
 	private double precioCamarotes;
 	private double precioExtras;
+	private double precioDescuento;
+	private double precioFinal;
 
 	public Pedido() {
-		codigoPedido= new Random().nextLong();
+		codigoPedido = new Random().nextLong();
 	}
 
 	public boolean personasCorrectas() {
@@ -32,11 +34,12 @@ public class Pedido {
 		}
 	}
 
-	public double precioCamarotes(Cruise crucero) {
+	public double precioCamarotes() {
 		Ship barco = crucero.getBarco();
 		precioCamarotes = (barco.getPrecioCamDobExt() * camDobExt) + (barco.getPrecioCamDobInt() * camDobInt)
 				+ (barco.getPrecioCamFamExt() * camFamExt) + (barco.getPrecioCamFamInt() * camFamInt);
 		return precioCamarotes;
+
 	}
 
 	public double precioExtras() {
@@ -44,6 +47,15 @@ public class Pedido {
 			precioExtras += e.getPrecio();
 		}
 		return precioExtras;
+	}
+	
+	public double precioDescuento(){
+		if (crucero.isDescuento()){
+			return precioCamarotes*0.15;
+		}
+		else {
+			return 0;
+		}
 	}
 
 	public void addExtra(Extra extra) {
@@ -133,5 +145,5 @@ public class Pedido {
 	public long getCodigoPedido() {
 		return codigoPedido;
 	}
-
+	
 }

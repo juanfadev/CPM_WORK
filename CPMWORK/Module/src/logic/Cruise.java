@@ -1,5 +1,7 @@
 package logic;
 
+import java.util.Date;
+
 public class Cruise {
 
 	public final static boolean UNDER16 = true;
@@ -13,12 +15,12 @@ public class Cruise {
 	private String descripcion;
 	private boolean aptoMenores;
 	private int duration; // in days
-	private String[] fechasSalida;
+	private Date[] fechasSalida;
 	private Ship barco;
 	private boolean descuento;
 
 	public Cruise(String codigoCrucero, String zona, String denominacion, String puertoSalida, String itinerario,
-			String descripcion, boolean aptoMenores, int duration, String[] fechasSalida, Ship barco) {
+			String descripcion, boolean aptoMenores, int duration, Date[] fechasSalida, Ship barco) {
 		super();
 		this.codigoCrucero = codigoCrucero;
 		this.zona = zona;
@@ -92,11 +94,11 @@ public class Cruise {
 		this.duration = duration;
 	}
 
-	public String[] getFechasSalida() {
+	public Date[] getFechasSalida() {
 		return fechasSalida;
 	}
 
-	public void setFechasSalida(String[] fechasSalida) {
+	public void setFechasSalida(Date[] fechasSalida) {
 		this.fechasSalida = fechasSalida;
 	}
 
@@ -119,6 +121,8 @@ public class Cruise {
 	public void setDescuento(boolean descuento) {
 		this.descuento = descuento;
 	}
+	
+	
 	
 	/*
 	/////////////////////////////////////////
