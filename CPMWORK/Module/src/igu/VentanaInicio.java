@@ -12,7 +12,6 @@ import logic.Catalog;
 import logic.Cruise;
 import logic.Pedido;
 
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import javax.swing.JToggleButton;
 import java.awt.event.ActionListener;
@@ -41,14 +40,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
-import java.util.Date;
 import javax.swing.JTextArea;
-import javax.swing.BoxLayout;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.layout.FormSpecs;
 
 public class VentanaInicio extends JFrame {
 
@@ -112,8 +104,9 @@ public class VentanaInicio extends JFrame {
 	private JTable tRooms;
 	private ModeloNoEditable modeloRooms;
 	private JPanel pnRoomBtn;
-	private JButton btnModify;
+	private JButton btnAddRoom;
 	private JButton btnRemove;
+	private VentanaAddRoom vAR;
 
 	/**
 	 * Launch the application.
@@ -705,16 +698,25 @@ public class VentanaInicio extends JFrame {
 	private JPanel getPnRoomBtn() {
 		if (pnRoomBtn == null) {
 			pnRoomBtn = new JPanel();
-			pnRoomBtn.add(getBtnModify());
+			pnRoomBtn.add(getBtnAddRoom());
 			pnRoomBtn.add(getBtnRemove());
 		}
 		return pnRoomBtn;
 	}
-	private JButton getBtnModify() {
-		if (btnModify == null) {
-			btnModify = new JButton("Modify");
+	private JButton getBtnAddRoom() {
+		if (btnAddRoom == null) {
+			VentanaInicio vI=this;
+			btnAddRoom = new JButton("AddRoom");
+			btnAddRoom.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					vAR = new VentanaAddRoom(vI);
+					vAR.setModal(true);
+					vAR.setLocationRelativeTo(vI);
+					vAR.setVisible(true);
+				}
+			});
 		}
-		return btnModify;
+		return btnAddRoom;
 	}
 	private JButton getBtnRemove() {
 		if (btnRemove == null) {
