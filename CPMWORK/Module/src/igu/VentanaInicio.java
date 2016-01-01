@@ -116,9 +116,6 @@ public class VentanaInicio extends JFrame {
 	private JButton btnRemove;
 	private VentanaAddRoom vAR;
 	private JPanel pnRecommended;
-	private JPanel pnSearchButton;
-	private JButton btnSearch_2;
-	private JLabel label;
 
 	/**
 	 * Launch the application.
@@ -186,6 +183,7 @@ public class VentanaInicio extends JFrame {
 	private JToggleButton getTglbtnRooms() {
 		if (tglbtnRooms == null) {
 			tglbtnRooms = new JToggleButton("Rooms");
+			tglbtnRooms.setEnabled(false);
 			tglbtnRooms.setMnemonic('r');
 			tglbtnRooms.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
@@ -200,6 +198,7 @@ public class VentanaInicio extends JFrame {
 	private JToggleButton getTglbtnPersonalData() {
 		if (tglbtnPersonalData == null) {
 			tglbtnPersonalData = new JToggleButton("Personal Data");
+			tglbtnPersonalData.setEnabled(false);
 			tglbtnPersonalData.setMnemonic('r');
 			tglbtnPersonalData.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
@@ -214,6 +213,7 @@ public class VentanaInicio extends JFrame {
 	private JToggleButton getTglbtnConfirmation() {
 		if (tglbtnConfirmation == null) {
 			tglbtnConfirmation = new JToggleButton("Confirmation");
+			tglbtnConfirmation.setEnabled(false);
 			tglbtnConfirmation.setMnemonic('c');
 			tglbtnConfirmation.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
@@ -228,6 +228,7 @@ public class VentanaInicio extends JFrame {
 	private JToggleButton getTglbtnPayout() {
 		if (tglbtnPayout == null) {
 			tglbtnPayout = new JToggleButton("Payout");
+			tglbtnPayout.setEnabled(false);
 			tglbtnPayout.setMnemonic('p');
 			tglbtnPayout.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
@@ -270,7 +271,6 @@ public class VentanaInicio extends JFrame {
 		if (pnHome == null) {
 			pnHome = new JPanel();
 			pnHome.setLayout(new BorderLayout(0, 0));
-			pnHome.add(getPnSearchButton(), BorderLayout.EAST);
 			pnHome.add(getPnRecommended(), BorderLayout.CENTER);
 		}
 		return pnHome;
@@ -623,7 +623,8 @@ public class VentanaInicio extends JFrame {
 			btnBook = new JButton("Book Now");
 			btnBook.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					((CardLayout) pnCentral.getLayout()).show(pnCentral, "panelRooms");
+					getTglbtnRooms().setEnabled(true);
+					getTglbtnRooms().doClick();
 					pedido.setCrucero(catalogo.getCruise(lblDenominacion.getText()));
 				}
 			});
@@ -794,47 +795,6 @@ public class VentanaInicio extends JFrame {
 		}
 		return pnRecommended;
 	}
-	private JPanel getPnSearchButton() {
-		if (pnSearchButton == null) {
-			pnSearchButton = new JPanel();
-			GridBagLayout gbl_pnSearchButton = new GridBagLayout();
-			gbl_pnSearchButton.columnWidths = new int[]{65, 0};
-			gbl_pnSearchButton.rowHeights = new int[]{143, 0, 0, 143, 0};
-			gbl_pnSearchButton.columnWeights = new double[]{0.0, Double.MIN_VALUE};
-			gbl_pnSearchButton.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-			pnSearchButton.setLayout(gbl_pnSearchButton);
-			GridBagConstraints gbc_label = new GridBagConstraints();
-			gbc_label.insets = new Insets(0, 0, 5, 0);
-			gbc_label.gridx = 0;
-			gbc_label.gridy = 0;
-			pnSearchButton.add(getLabel(), gbc_label);
-			GridBagConstraints gbc_btnSearch_2 = new GridBagConstraints();
-			gbc_btnSearch_2.gridheight = 2;
-			gbc_btnSearch_2.fill = GridBagConstraints.BOTH;
-			gbc_btnSearch_2.insets = new Insets(0, 0, 5, 0);
-			gbc_btnSearch_2.gridx = 0;
-			gbc_btnSearch_2.gridy = 1;
-			pnSearchButton.add(getBtnSearch_2(), gbc_btnSearch_2);
-		}
-		return pnSearchButton;
-	}
-	private JButton getBtnSearch_2() {
-		if (btnSearch_2 == null) {
-			btnSearch_2 = new JButton("Search");
-			btnSearch_2.setIcon(new ImageIcon(VentanaInicio.class.getResource("/img/magnifying-glass-481818_960_720.png")));
-			btnSearch_2.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-				}
-			});
-		}
-		return btnSearch_2;
-	}
-	private JLabel getLabel() {
-		if (label == null) {
-			label = new JLabel("");
-			label.setIcon(new ImageIcon(VentanaInicio.class
-					.getResource("/img/lupa.JPG")));
-		}
-		return label;
-	}
+	
+	
 }
