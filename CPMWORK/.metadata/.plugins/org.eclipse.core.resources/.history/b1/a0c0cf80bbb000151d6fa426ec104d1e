@@ -1,0 +1,780 @@
+package igu;
+
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+import logic.Catalog;
+import logic.Cruise;
+import logic.Extra;
+import logic.Pedido;
+import logic.Room;
+
+import java.awt.GridLayout;
+import javax.swing.JToggleButton;
+import java.awt.event.ActionListener;
+import java.util.Locale;
+import java.util.Random;
+import java.util.Vector;
+import java.awt.event.ActionEvent;
+import java.awt.CardLayout;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JComboBox;
+import javax.swing.JButton;
+import javax.swing.SwingConstants;
+import javax.swing.ToolTipManager;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.KeyStroke;
+import java.awt.event.KeyEvent;
+import java.rmi.server.LoaderHandler;
+import java.text.ParseException;
+import java.awt.event.InputEvent;
+import javax.swing.JTabbedPane;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.JTable;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+
+public class VentanaInicio extends JFrame {
+
+	private JPanel pnPrincipal;
+	private JPanel pnPasos;
+	private JToggleButton tglbtnHome;
+	private JToggleButton tglbtnRooms;
+	private JToggleButton tglbtnPersonalData;
+	private JToggleButton tglbtnConfirmation;
+	private JToggleButton tglbtnPayout;
+	private JPanel pnCentral;
+	private JToggleButton tglbtnSearch;
+	private JPanel pnHome;
+
+	private Catalog catalogo;
+	private Pedido pedido;
+	private Cruise crucero;
+	private JPanel pnSearch;
+	private JPanel pnRooms;
+	private JPanel pnConfirmation;
+	private JPanel pnDetails;
+	private JPanel pnSearchDet;
+	private JPanel pnSearchBut;
+	private JLabel lblFrom;
+	private JTextField txtDateFrom;
+	private JLabel lblTo;
+	private JTextField txtDateTo;
+	private JLabel lblDestination;
+	private JComboBox cbDest;
+	private JButton btnSearch;
+	private JButton btnDetails;
+	private JMenuBar menuBar;
+	private JMenu mnFile;
+	private JMenu mnEdit;
+	private JMenu mnHelp;
+	private JMenuItem menuItem;
+	private JCheckBoxMenuItem chckbxmntmTooltips;
+	private JMenuItem mntmRestart;
+	private JTabbedPane tpDetails;
+	private JPanel pnPictures;
+	private JPanel pnInfo;
+	private Locale localizacion = Locale.getDefault(Locale.Category.FORMAT);
+	private JTable tCruises;
+	private ModeloNoEditable modeloTabla;
+	private JButton btnBook;
+	private JScrollPane scCruises;
+	private JButton btnPrev;
+	private JButton btnNext;
+	private JLabel lblPicture;
+	private JLabel lblDenominacion;
+	private JLabel lblZona;
+	private JLabel lblSalida;
+	private JLabel lblItinerario;
+	private JLabel lblAptoMenores;
+	private JLabel lblDuracion;
+	private JLabel lblBarco;
+	private JLabel lblDate;
+	private JTextArea taDescripcion;
+	private JPanel pnIn;
+	private JScrollPane spRooms;
+	private JTable tRooms;
+	private ModeloNoEditable modeloRooms;
+	private JPanel pnRoomBtn;
+	private JButton btnAddRoom;
+	private JButton btnRemove;
+	private VentanaAddRoom vAR;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					VentanaInicio frame = new VentanaInicio();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public VentanaInicio() {
+		catalogo = new Catalog(localizacion);
+		pedido = new Pedido();
+		restart();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 650, 380);
+		setJMenuBar(getMenuBar_1());
+		pnPrincipal = new JPanel();
+		pnPrincipal.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(pnPrincipal);
+		pnPrincipal.setLayout(new BorderLayout(0, 0));
+		pnPrincipal.add(getPnPasos(), BorderLayout.NORTH);
+		pnPrincipal.add(getPnCentral(), BorderLayout.CENTER);
+
+	}
+
+	private JPanel getPnPasos() {
+		if (pnPasos == null) {
+			pnPasos = new JPanel();
+			pnPasos.setLayout(new GridLayout(1, 0, 0, 0));
+			pnPasos.add(getTglbtnHome());
+			pnPasos.add(getTglbtnSearch());
+			pnPasos.add(getTglbtnRooms());
+			pnPasos.add(getTglbtnPersonalData());
+			pnPasos.add(getTglbtnConfirmation());
+			pnPasos.add(getTglbtnPayout());
+		}
+		return pnPasos;
+	}
+
+	private JToggleButton getTglbtnHome() {
+		if (tglbtnHome == null) {
+			tglbtnHome = new JToggleButton("Home");
+			tglbtnHome.setMnemonic('h');
+			tglbtnHome.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					toggleAllButtons(tglbtnHome);
+					((CardLayout) pnCentral.getLayout()).show(pnCentral, "panelHome");
+				}
+			});
+		}
+		return tglbtnHome;
+	}
+
+	private JToggleButton getTglbtnRooms() {
+		if (tglbtnRooms == null) {
+			tglbtnRooms = new JToggleButton("Rooms");
+			tglbtnRooms.setMnemonic('r');
+			tglbtnRooms.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					toggleAllButtons(tglbtnRooms);
+					((CardLayout) pnCentral.getLayout()).show(pnCentral, "panelRooms");
+				}
+			});
+		}
+		return tglbtnRooms;
+	}
+
+	private JToggleButton getTglbtnPersonalData() {
+		if (tglbtnPersonalData == null) {
+			tglbtnPersonalData = new JToggleButton("Personal Data");
+			tglbtnPersonalData.setMnemonic('r');
+			tglbtnPersonalData.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					toggleAllButtons(tglbtnPersonalData);
+					((CardLayout) pnCentral.getLayout()).show(pnCentral, "panelPersonalData");
+				}
+			});
+		}
+		return tglbtnPersonalData;
+	}
+
+	private JToggleButton getTglbtnConfirmation() {
+		if (tglbtnConfirmation == null) {
+			tglbtnConfirmation = new JToggleButton("Confirmation");
+			tglbtnConfirmation.setMnemonic('c');
+			tglbtnConfirmation.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					toggleAllButtons(tglbtnConfirmation);
+					((CardLayout) pnCentral.getLayout()).show(pnCentral, "panelConfirmation");
+				}
+			});
+		}
+		return tglbtnConfirmation;
+	}
+
+	private JToggleButton getTglbtnPayout() {
+		if (tglbtnPayout == null) {
+			tglbtnPayout = new JToggleButton("Payout");
+			tglbtnPayout.setMnemonic('p');
+			tglbtnPayout.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					toggleAllButtons(tglbtnPayout);
+					((CardLayout) pnCentral.getLayout()).show(pnCentral, "panelPayout");
+				}
+			});
+		}
+		return tglbtnPayout;
+	}
+
+	private JToggleButton getTglbtnSearch() {
+		if (tglbtnSearch == null) {
+			tglbtnSearch = new JToggleButton("Search");
+			tglbtnSearch.setMnemonic('s');
+			tglbtnSearch.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					toggleAllButtons(tglbtnSearch);
+					((CardLayout) pnCentral.getLayout()).show(pnCentral, "panelSearch");
+				}
+			});
+		}
+		return tglbtnSearch;
+	}
+
+	private JPanel getPnCentral() {
+		if (pnCentral == null) {
+			pnCentral = new JPanel();
+			pnCentral.setLayout(new CardLayout(0, 0));
+			pnCentral.add(getPnHome(), "panelHome");
+			pnCentral.add(getPnSearch(), "panelSearch");
+			pnCentral.add(getPnDetails(), "panelDetails");
+			pnCentral.add(getPnRooms(), "panelRooms");
+			pnCentral.add(getPnConfirmation(), "panelConfirmation");
+		}
+		return pnCentral;
+	}
+
+	private JPanel getPnHome() {
+		if (pnHome == null) {
+			pnHome = new JPanel();
+		}
+		return pnHome;
+	}
+
+	/*
+	 * METHODS METHODS METHODS METHODS METHODS
+	 */
+
+	private void restart() {
+		selectDescuento();
+	}
+
+	private void toggleAllButtons(JToggleButton este) {
+		for (Component c : pnPasos.getComponents()) {
+			JToggleButton boton = (JToggleButton) c;
+			if (este != boton) {
+				boton.setSelected(false);
+			}
+		}
+		este.setSelected(true);
+	}
+
+	private void selectDescuento() {
+		Random random = new Random();
+		int[] descuento = { random.nextInt(), random.nextInt() };
+		catalogo.setDescuento(descuento);
+	}
+
+	private void saveDatabases() {
+		// Save catalog to files
+		// Save registro to files
+	}
+	
+	private void loadDetails(String string) {
+		if(crucero.isAptoMenores()){
+			lblAptoMenores.setText("Apto para menores");
+		}
+		lblBarco.setText("Barco"+": " + crucero.getBarco().getDenominacion());
+		lblDenominacion.setText("Crucero" +": " + crucero.getDenominacion());
+		lblItinerario.setText("Itinerario" + ": " + crucero.getItinerario());
+		lblDuracion.setText("Duración"+": "+((Integer)crucero.getDuration()).toString());
+		lblZona.setText("Zona"+": " +crucero.getZona());
+		lblSalida.setText("Salida desde" +": "+ crucero.getPuertoSalida());
+		taDescripcion.setText(crucero.getDescripcion());
+		lblDate.setText("Fecha de salida" + ": " +string);
+		
+	}
+	public void loadRoom(Room room ){
+		pedido.addRoom(room);
+		if (pedido.personasCorrectas()){
+		vAR.dispose();
+		loadTable();
+		}
+		else{
+			pedido
+			JOptionPane.showMessageDialog(null, "There are too much people for this room. Please rearrange it before continue");
+		}
+	}
+	
+	private void loadTable(){
+		modeloRooms.getDataVector().clear();
+		Object[] nuevaFila = new Object[3];
+		for (Room r:pedido.getRooms()){
+			if (r.getCam()==r.camDobInt){
+				nuevaFila[0]= "Double";
+				nuevaFila[1]= "Interior";
+			}
+			else if (r.getCam()==r.camDobExt) {
+				nuevaFila[0]="Double";
+				nuevaFila[1]="Exterior";
+			}
+			else if (r.getCam()==r.camFamExt) {
+				nuevaFila[0]="Family";
+				nuevaFila[1]="Exterior";
+			}
+			else if (r.getCam()==r.camFamInt) {
+				nuevaFila[0]="Family";
+				nuevaFila[1]="Interior";
+			}
+			nuevaFila[2] = r.getExtras();
+			modeloRooms.addRow(nuevaFila);
+		}
+		modeloRooms.fireTableDataChanged();
+		
+	}
+
+	/*
+	 * 
+	 */
+	/*
+	 * 
+	 * METHODS METHODS METHODS
+	 */
+	private JPanel getPnSearch() {
+		if (pnSearch == null) {
+			pnSearch = new JPanel();
+			pnSearch.setLayout(new BorderLayout(0, 0));
+			pnSearch.add(getPnSearchDet(), BorderLayout.NORTH);
+			pnSearch.add(getScCruises(), BorderLayout.CENTER);
+			pnSearch.add(getPnSearchBut(), BorderLayout.SOUTH);
+		}
+		return pnSearch;
+	}
+
+	private JPanel getPnRooms() {
+		if (pnRooms == null) {
+			pnRooms = new JPanel();
+			pnRooms.setLayout(new BorderLayout(0, 0));
+			pnRooms.add(getSpRooms());
+			pnRooms.add(getPnRoomBtn(), BorderLayout.SOUTH);
+		}
+		return pnRooms;
+	}
+
+	private JPanel getPnConfirmation() {
+		if (pnConfirmation == null) {
+			pnConfirmation = new JPanel();
+		}
+		return pnConfirmation;
+	}
+
+	private JPanel getPnDetails() {
+		if (pnDetails == null) {
+			pnDetails = new JPanel();
+			pnDetails.setLayout(new BorderLayout(0, 0));
+			pnDetails.add(getTpDetails());
+			pnDetails.add(getBtnBook(), BorderLayout.SOUTH);
+		}
+		return pnDetails;
+	}
+
+	private JPanel getPnSearchDet() {
+		if (pnSearchDet == null) {
+			pnSearchDet = new JPanel();
+			pnSearchDet.add(getLblFrom());
+			pnSearchDet.add(getTxtDateFrom());
+			pnSearchDet.add(getLblTo());
+			pnSearchDet.add(getTxtDateTo());
+			pnSearchDet.add(getLblDestination());
+			pnSearchDet.add(getCbDest());
+			pnSearchDet.add(getBtnSearch());
+		}
+		return pnSearchDet;
+	}
+
+	private JPanel getPnSearchBut() {
+		if (pnSearchBut == null) {
+			pnSearchBut = new JPanel();
+			pnSearchBut.add(getBtnDetails());
+		}
+		return pnSearchBut;
+	}
+
+	private JLabel getLblFrom() {
+		if (lblFrom == null) {
+			lblFrom = new JLabel("From: ");
+		}
+		return lblFrom;
+	}
+
+	private JTextField getTxtDateFrom() {
+		if (txtDateFrom == null) {
+			txtDateFrom = new JTextField();
+			txtDateFrom.setColumns(10);
+		}
+		return txtDateFrom;
+	}
+
+	private JLabel getLblTo() {
+		if (lblTo == null) {
+			lblTo = new JLabel("To: ");
+		}
+		return lblTo;
+	}
+
+	private JTextField getTxtDateTo() {
+		if (txtDateTo == null) {
+			txtDateTo = new JTextField();
+			txtDateTo.setColumns(10);
+		}
+		return txtDateTo;
+	}
+
+	private JLabel getLblDestination() {
+		if (lblDestination == null) {
+			lblDestination = new JLabel("Destination: ");
+		}
+		return lblDestination;
+	}
+
+	private JComboBox getCbDest() {
+		if (cbDest == null) {
+			cbDest = new JComboBox();
+			cbDest.setModel(new DefaultComboBoxModel(catalogo.getZonas().toArray()));
+		}
+		return cbDest;
+	}
+
+	private JButton getBtnSearch() {
+		if (btnSearch == null) {
+			btnSearch = new JButton("Search");
+			btnSearch.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					try {
+						modeloTabla.getDataVector().clear();
+						modeloTabla=catalogo.searchZonaDate(getTxtDateFrom().getText(), getTxtDateTo().getText(),
+								getCbDest().getSelectedItem().toString(),modeloTabla);
+						modeloTabla.fireTableDataChanged();
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}
+			});
+		}
+		return btnSearch;
+	}
+
+	private JButton getBtnDetails() {
+		if (btnDetails == null) {
+			btnDetails = new JButton("Details");
+			btnDetails.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					int row = tCruises.getSelectedRow();
+					crucero = catalogo.getCruise((String) ((Vector) modeloTabla.getDataVector().elementAt(row)).elementAt(0));
+					loadDetails((String) ((Vector) modeloTabla.getDataVector().elementAt(row)).elementAt(4));
+					((CardLayout) pnCentral.getLayout()).show(pnCentral, "panelDetails");
+					
+					
+				}
+
+				
+			});
+			btnDetails.setHorizontalAlignment(SwingConstants.RIGHT);
+		}
+		return btnDetails;
+	}
+
+	private JMenuBar getMenuBar_1() {
+		if (menuBar == null) {
+			menuBar = new JMenuBar();
+			menuBar.add(getMnFile());
+			menuBar.add(getMnEdit());
+			menuBar.add(getMnHelp());
+		}
+		return menuBar;
+	}
+
+	private JMenu getMnFile() {
+		if (mnFile == null) {
+			mnFile = new JMenu("File");
+			mnFile.setMnemonic('f');
+			mnFile.add(getMntmRestart());
+		}
+		return mnFile;
+	}
+
+	private JMenu getMnEdit() {
+		if (mnEdit == null) {
+			mnEdit = new JMenu("Edit");
+			mnEdit.setMnemonic('d');
+			mnEdit.add(getChckbxmntmTooltips());
+			mnEdit.add(getMenuItem());
+		}
+		return mnEdit;
+	}
+
+	private JMenu getMnHelp() {
+		if (mnHelp == null) {
+			mnHelp = new JMenu("Help");
+			mnHelp.setMnemonic('h');
+		}
+		return mnHelp;
+	}
+
+	private JMenuItem getMenuItem() {
+		if (menuItem == null) {
+			menuItem = new JMenuItem("New menu item");
+		}
+		return menuItem;
+	}
+
+	private JCheckBoxMenuItem getChckbxmntmTooltips() {
+		if (chckbxmntmTooltips == null) {
+			chckbxmntmTooltips = new JCheckBoxMenuItem("Tooltips");
+			chckbxmntmTooltips.addChangeListener(new ChangeListener() {
+				public void stateChanged(ChangeEvent arg0) {
+					if (chckbxmntmTooltips.isSelected()) {
+						ToolTipManager.sharedInstance().setEnabled(true);
+					} else {
+						ToolTipManager.sharedInstance().setEnabled(false);
+					}
+
+				}
+			});
+			chckbxmntmTooltips.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.CTRL_MASK));
+			chckbxmntmTooltips.setSelected(true);
+		}
+		return chckbxmntmTooltips;
+	}
+
+	private JMenuItem getMntmRestart() {
+		if (mntmRestart == null) {
+			mntmRestart = new JMenuItem("Restart");
+			mntmRestart.setMnemonic('r');
+		}
+		return mntmRestart;
+	}
+
+	private JTabbedPane getTpDetails() {
+		if (tpDetails == null) {
+			tpDetails = new JTabbedPane(JTabbedPane.TOP);
+			tpDetails.addTab("Pictures", null, getPnPictures(), null);
+			tpDetails.addTab("Information", null, getPnInfo(), null);
+		}
+		return tpDetails;
+	}
+
+	private JPanel getPnPictures() {
+		if (pnPictures == null) {
+			pnPictures = new JPanel();
+			pnPictures.setLayout(new BorderLayout(0, 0));
+			pnPictures.add(getBtnPrev(), BorderLayout.WEST);
+			pnPictures.add(getBtnNext(), BorderLayout.EAST);
+			pnPictures.add(getLblPicture(), BorderLayout.CENTER);
+		}
+		return pnPictures;
+	}
+
+	private JPanel getPnInfo() {
+		if (pnInfo == null) {
+			pnInfo = new JPanel();
+			pnInfo.setLayout(new BorderLayout(0, 0));
+			pnInfo.add(getPnIn(), BorderLayout.CENTER);
+			pnInfo.add(getTaDescripcion(), BorderLayout.SOUTH);
+		}
+		return pnInfo;
+	}
+
+	private JTable getTCruises() {
+		if (tCruises == null) {
+			String[] nombreColumnas = { "Name", "Starting Point", "Duration", "Destinations","Date" };
+			modeloTabla = new ModeloNoEditable(nombreColumnas, 0);
+			tCruises = new JTable(modeloTabla);
+		}
+		return tCruises;
+	}
+	private JButton getBtnBook() {
+		if (btnBook == null) {
+			btnBook = new JButton("Book Now");
+			btnBook.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					((CardLayout) pnCentral.getLayout()).show(pnCentral, "panelRooms");
+					pedido.setCrucero(catalogo.getCruise(lblDenominacion.getText()));
+				}
+			});
+		}
+		return btnBook;
+	}
+	private JScrollPane getScCruises() {
+		if (scCruises == null) {
+			scCruises = new JScrollPane();
+			scCruises.setViewportView(getTCruises());
+		}
+		return scCruises;
+	}
+	private JButton getBtnPrev() {
+		if (btnPrev == null) {
+			btnPrev = new JButton("Previous Image");
+		}
+		return btnPrev;
+	}
+	private JButton getBtnNext() {
+		if (btnNext == null) {
+			btnNext = new JButton("Next Image");
+		}
+		return btnNext;
+	}
+	private JLabel getLblPicture() {
+		if (lblPicture == null) {
+			lblPicture = new JLabel("");
+		}
+		return lblPicture;
+	}
+	private JLabel getLblDenominacion() {
+		if (lblDenominacion == null) {
+			lblDenominacion = new JLabel("");
+			lblDenominacion.setAlignmentY(Component.TOP_ALIGNMENT);
+		}
+		return lblDenominacion;
+	}
+	private JLabel getLblZona() {
+		if (lblZona == null) {
+			lblZona = new JLabel("");
+			lblZona.setAlignmentY(Component.TOP_ALIGNMENT);
+		}
+		return lblZona;
+	}
+	private JLabel getLblSalida() {
+		if (lblSalida == null) {
+			lblSalida = new JLabel("");
+			lblSalida.setAlignmentY(Component.TOP_ALIGNMENT);
+		}
+		return lblSalida;
+	}
+	private JLabel getLblItinerario() {
+		if (lblItinerario == null) {
+			lblItinerario = new JLabel("");
+			lblItinerario.setAlignmentY(Component.TOP_ALIGNMENT);
+		}
+		return lblItinerario;
+	}
+	private JLabel getLblAptoMenores() {
+		if (lblAptoMenores == null) {
+			lblAptoMenores = new JLabel("");
+			lblAptoMenores.setAlignmentY(Component.TOP_ALIGNMENT);
+		}
+		return lblAptoMenores;
+	}
+	private JLabel getLblDuracion() {
+		if (lblDuracion == null) {
+			lblDuracion = new JLabel("");
+			lblDuracion.setAlignmentY(Component.TOP_ALIGNMENT);
+		}
+		return lblDuracion;
+	}
+	private JLabel getLblBarco() {
+		if (lblBarco == null) {
+			lblBarco = new JLabel("");
+			lblBarco.setAlignmentY(Component.TOP_ALIGNMENT);
+		}
+		return lblBarco;
+	}
+	private JLabel getLblDate() {
+		if (lblDate == null) {
+			lblDate = new JLabel("");
+			lblDate.setAlignmentY(Component.TOP_ALIGNMENT);
+		}
+		return lblDate;
+	}
+	private JTextArea getTaDescripcion() {
+		if (taDescripcion == null) {
+			taDescripcion = new JTextArea();
+			taDescripcion.setLineWrap(true);
+			taDescripcion.setWrapStyleWord(true);
+		}
+		return taDescripcion;
+	}
+	private JPanel getPnIn() {
+		if (pnIn == null) {
+			pnIn = new JPanel();
+			pnIn.add(getLblDuracion());
+			pnIn.add(getLblBarco());
+			pnIn.add(getLblAptoMenores());
+			pnIn.add(getLblItinerario());
+			pnIn.add(getLblDate());
+			pnIn.add(getLblSalida());
+			pnIn.add(getLblZona());
+			pnIn.add(getLblDenominacion());
+		}
+		return pnIn;
+	}
+	private JScrollPane getSpRooms() {
+		if (spRooms == null) {
+			spRooms = new JScrollPane();
+			spRooms.setViewportView(getTRooms());
+		}
+		return spRooms;
+	}
+	private JTable getTRooms() {
+		if (tRooms == null) {
+			String[] nombreColumnas = { "Type of Room", "Location", "Room Extras"};
+			modeloRooms = new ModeloNoEditable(nombreColumnas, 0);
+			tRooms = new JTable(modeloRooms);
+		}
+		return tRooms;
+	}
+	private JPanel getPnRoomBtn() {
+		if (pnRoomBtn == null) {
+			pnRoomBtn = new JPanel();
+			pnRoomBtn.add(getBtnAddRoom());
+			pnRoomBtn.add(getBtnRemove());
+		}
+		return pnRoomBtn;
+	}
+	private JButton getBtnAddRoom() {
+		if (btnAddRoom == null) {
+			VentanaInicio vI=this;
+			btnAddRoom = new JButton("AddRoom");
+			btnAddRoom.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					vAR = new VentanaAddRoom(vI, crucero);
+					vAR.setModal(true);
+					vAR.setLocationRelativeTo(vI);
+					vAR.setVisible(true);
+				}
+			});
+		}
+		return btnAddRoom;
+	}
+	private JButton getBtnRemove() {
+		if (btnRemove == null) {
+			btnRemove = new JButton("Remove");
+			btnRemove.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					pedido.removeRoom(tRooms.getSelectedRow());
+					loadTable();
+				}
+			});
+		}
+		return btnRemove;
+	}
+
+	public Catalog getCatalogo() {
+		return catalogo;
+	}
+	
+}

@@ -32,5 +32,11 @@ public class Extra {
 		this.precio = precio;
 	}
 	
+	@Override
+	public String toString(){
+		return denominacion;
+		
+	}
+	
 	
 }

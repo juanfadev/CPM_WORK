@@ -130,7 +130,10 @@ public class Cruise {
 	/////////////////////////////////////////
 	*/
 
-
+	@Override
+	public String toString(){
+		return denominacion;
+	}
 	
 	
 }

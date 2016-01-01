@@ -1,0 +1,8 @@
+package logic;
+
+public class Person {
+
+	private int age;
+	private boolean adult;
+	
+}

@@ -4,4 +4,10 @@
 		id="org.eclipse.wb.swing.components javax.swing.JPasswordField"
 		category="org.eclipse.wb.swing.components"
 		nextEntry="org.eclipse.wb.swing.components javax.swing.JSpinner"/>
+	<moveCategory
+		id="org.eclipse.wb.swing.JGoodies"
+		nextCategory="org.eclipse.wb.swing.JGoodies"/>
+	<moveEntry
+		id="org.eclipse.wb.swing.components javax.swing.JTextArea"
+		category="org.eclipse.wb.swing.components"/>
 </commands>

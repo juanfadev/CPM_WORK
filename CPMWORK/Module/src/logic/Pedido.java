@@ -1,18 +1,20 @@
 package logic;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
 public class Pedido {
 
 	private long codigoPedido;
-	private int people;
+	private int adults;
+	private int kids;
 	private int menores;
 	private long camDobInt;
 	private long camDobExt;
 	private long camFamInt;
 	private long camFamExt;
-	private long camaExtra;
+	private int camasExtra;
 	private Cruise crucero;
 	private Usuario usuario;
 	private ArrayList<Extra> extras;
@@ -20,14 +22,22 @@ public class Pedido {
 	private double precioExtras;
 	private double precioDescuento;
 	private double precioFinal;
+	private ArrayList<Room> rooms;
 
 	public Pedido() {
 		codigoPedido = new Random().nextLong();
+		extras= new ArrayList<>();
+		rooms=new ArrayList<>();
 	}
 
 	public boolean personasCorrectas() {
+		if (kids<camasExtra){
+			return false;
+		}
+		int kids= this.kids - camasExtra;
 		long totalPeople = camDobExt * 2 + camDobInt * 2 + camFamExt * 5 + camFamInt * 5;
-		if (people < totalPeople) {
+		
+		if ((adults+kids) <= totalPeople) {
 			return true;
 		} else {
 			return false;
@@ -64,18 +74,6 @@ public class Pedido {
 
 	public void removeExtra(Extra extra) {
 		extras.remove(extra);
-	}
-
-	public int getPeople() {
-		return people;
-	}
-
-	public void addPeople(int people) {
-		this.people = this.people + people;
-	}
-
-	public void setPeople(int people) {
-		this.people = people;
 	}
 
 	public int getMenores() {
@@ -119,11 +117,11 @@ public class Pedido {
 	}
 
 	public long getCamaExtra() {
-		return camaExtra;
+		return camasExtra;
 	}
 
-	public void setCamaExtra(long camaExtra) {
-		this.camaExtra = camaExtra;
+	public void addCamaExtra() {
+		camasExtra++;
 	}
 
 	public Cruise getCrucero() {
@@ -144,6 +142,54 @@ public class Pedido {
 
 	public long getCodigoPedido() {
 		return codigoPedido;
+	}
+	public void addRoom(Room room){
+		rooms.add(room);
+		if (room.getCam()==1){
+			camDobInt++;
+		}
+		else if (room.getCam()==2) {
+			camDobExt++;
+		}
+		else if (room.getCam()==3) {
+			camFamInt++;
+		}
+		else if (room.getCam()==4){
+			camFamExt++;
+		}
+		if (room.isCamaExtra()){
+			camasExtra++;
+		}
+		adults=adults+room.getAdults();
+		kids=kids+room.getKids();
+		extras.addAll(room.getExtras());
+		
+	}
+	public void removeRoom(int index){
+		Room room=rooms.remove(index);
+		if (room.getCam()==1){
+			camDobInt--;
+		}
+		else if (room.getCam()==2) {
+			camDobExt--;
+		}
+		else if (room.getCam()==3) {
+			camFamInt--;
+		}
+		else if (room.getCam()==4){
+			camFamExt--;
+		}
+		if (room.isCamaExtra()){
+			camasExtra--;
+		}
+		adults=adults-room.getAdults();
+		kids=kids-room.getKids();
+		extras.removeAll(room.getExtras());
+		
+	}
+
+	public ArrayList<Room> getRooms() {
+		return rooms;
 	}
 	
 }

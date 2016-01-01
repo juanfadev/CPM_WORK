@@ -187,4 +187,9 @@ public class Catalog {
 		return null;
 	}
 
+	public Extra[] getExtras() {
+		return extras.toArray(new Extra[extras.size()]);
+	}
+
+	
 }

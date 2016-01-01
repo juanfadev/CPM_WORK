@@ -1,0 +1,14 @@
+package logic;
+
+public class Room {
+
+	public static final int camDobInt=1;
+	public static final int camDobExt=2;
+	public static final int camFamInt=3;
+	public static final int camFamExt=4;
+	private int cam;
+	private boolean camaExtra;
+	
+	
+	
+}

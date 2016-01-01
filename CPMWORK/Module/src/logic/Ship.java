@@ -133,5 +133,8 @@ public class Ship {
 		return camDobInt*precioCamDobInt + camDobExt*precioCamDobExt + camFamInt*precioCamFamInt + camFamExt*precioCamFamExt;
 	}
 	
-	
+	@Override
+	public String toString(){
+		return denominacion;
+	}
 }

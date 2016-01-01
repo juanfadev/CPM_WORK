@@ -1,0 +1,278 @@
+package igu;
+
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+import logic.Catalog;
+import logic.Cruise;
+import logic.Extra;
+import logic.Pedido;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
+import javax.swing.JComboBox;
+import javax.swing.JScrollPane;
+import javax.swing.border.TitledBorder;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.UIManager;
+import java.awt.Color;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import javax.swing.JTextField;
+import java.awt.Component;
+
+public class VentanaAddRoom extends JDialog {
+
+	private final JPanel contentPanel = new JPanel();
+	private VentanaInicio vI;
+	private Pedido pedido;
+	private Cruise crucero;
+	private final ButtonGroup btnGroupLocal = new ButtonGroup();
+	private final ButtonGroup btnGroupType = new ButtonGroup();
+	private JComboBox cbExtras;
+	private JScrollPane spExtras;
+	private JPanel pnExtras;
+	private JList listaExtras;
+	private DefaultListModel modeloLista;
+	private JButton btnAddExtra;
+	private JPanel pnRoom;
+	private JLabel lblTypeOfRoom;
+	private JLabel lblLocation;
+	private JRadioButton rdbtnDouble;
+	private JRadioButton rdbtnFamily;
+	private JRadioButton rdbtnInside;
+	private JRadioButton rdbtnOutside;
+	private JButton btnAdd;
+	private JButton btnCancel;
+	private JPanel pnPeople;
+	private JScrollPane spPeople;
+	private JList listaPeople;
+	private JTextField textField;
+	private JButton btnAdd_1;
+	private JLabel lblAge;
+	private JButton btnRemove;
+
+	/**
+	 * Create the dialog.
+	 */
+	public VentanaAddRoom(VentanaInicio vI, Pedido pedido, Cruise crucero) {
+		this.vI=vI;
+		this.pedido=pedido;
+		this.crucero=crucero;
+		setResizable(false);
+		setTitle("Add Room");
+		setBounds(100, 100, 450, 300);
+		getContentPane().setLayout(new BorderLayout());
+		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		contentPanel.setLayout(null);
+		contentPanel.add(getPnExtras());
+		contentPanel.add(getPnRoom());
+		contentPanel.add(getBtnAdd());
+		contentPanel.add(getBtnCancel());
+		contentPanel.add(getPnPeople());
+		
+	}
+	private JComboBox getCbExtras() {
+		if (cbExtras == null) {
+			cbExtras = new JComboBox();
+			cbExtras.setBounds(10, 29, 95, 20);
+			cbExtras.setModel(new DefaultComboBoxModel(vI.getCatalogo().getExtras()));
+		}
+		return cbExtras;
+	}
+	private JScrollPane getSpExtras() {
+		if (spExtras == null) {
+			spExtras = new JScrollPane();
+			spExtras.setBounds(119, 11, 104, 117);
+			spExtras.setViewportView(getListaExtras());
+		}
+		return spExtras;
+	}
+	
+	private JList getListaExtras() {
+		if (listaExtras == null) {
+			modeloLista = new DefaultListModel<>();
+			listaExtras = new JList(modeloLista);
+		}
+		return listaExtras;
+	}
+	
+	private JPanel getPnExtras() {
+		if (pnExtras == null) {
+			pnExtras = new JPanel();
+			pnExtras.setBorder(new TitledBorder(null, "Extras: ", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			pnExtras.setBounds(20, 88, 247, 139);
+			pnExtras.setLayout(null);
+			pnExtras.add(getCbExtras());
+			pnExtras.add(getSpExtras());
+			pnExtras.add(getBtnAddExtra());
+		}
+		return pnExtras;
+	}
+	private JButton getBtnAddExtra() {
+		if (btnAddExtra == null) {
+			btnAddExtra = new JButton("Add Extra");
+			btnAddExtra.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					modeloLista.addElement(cbExtras.getSelectedItem());
+				}
+			});
+			btnAddExtra.setBounds(10, 92, 95, 23);
+		}
+		return btnAddExtra;
+	}
+	private JPanel getPnRoom() {
+		if (pnRoom == null) {
+			pnRoom = new JPanel();
+			pnRoom.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Room: ", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+			pnRoom.setBounds(20, 11, 247, 76);
+			pnRoom.setLayout(null);
+			pnRoom.add(getLblTypeOfRoom());
+			pnRoom.add(getRdbtnDouble());
+			pnRoom.add(getRdbtnFamily());
+			pnRoom.add(getLblLocation());
+			pnRoom.add(getRdbtnInside());
+			pnRoom.add(getRdbtnOutside());
+		}
+		return pnRoom;
+	}
+	private JLabel getLblTypeOfRoom() {
+		if (lblTypeOfRoom == null) {
+			lblTypeOfRoom = new JLabel("Type of Room:");
+			lblTypeOfRoom.setBounds(16, 20, 71, 14);
+		}
+		return lblTypeOfRoom;
+	}
+	private JLabel getLblLocation() {
+		if (lblLocation == null) {
+			lblLocation = new JLabel("Location:");
+			lblLocation.setBounds(16, 45, 44, 14);
+		}
+		return lblLocation;
+	}
+	private JRadioButton getRdbtnDouble() {
+		if (rdbtnDouble == null) {
+			rdbtnDouble = new JRadioButton("Double");
+			rdbtnDouble.setSelected(true);
+			btnGroupType.add(rdbtnDouble);
+			rdbtnDouble.setBounds(93, 16, 59, 23);
+		}
+		return rdbtnDouble;
+	}
+	private JRadioButton getRdbtnFamily() {
+		if (rdbtnFamily == null) {
+			rdbtnFamily = new JRadioButton("Family");
+			btnGroupType.add(rdbtnFamily);
+			rdbtnFamily.setBounds(164, 16, 55, 23);
+		}
+		return rdbtnFamily;
+	}
+	private JRadioButton getRdbtnInside() {
+		if (rdbtnInside == null) {
+			rdbtnInside = new JRadioButton("Inside");
+			rdbtnInside.setSelected(true);
+			btnGroupLocal.add(rdbtnInside);
+			rdbtnInside.setBounds(93, 42, 55, 23);
+		}
+		return rdbtnInside;
+	}
+	private JRadioButton getRdbtnOutside() {
+		if (rdbtnOutside == null) {
+			rdbtnOutside = new JRadioButton("Outside");
+			btnGroupLocal.add(rdbtnOutside);
+			rdbtnOutside.setBounds(164, 41, 63, 23);
+		}
+		return rdbtnOutside;
+	}
+	private JButton getBtnAdd() {
+		if (btnAdd == null) {
+			btnAdd = new JButton("Add");
+			btnAdd.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Extra[] extras= (Extra[]) modeloLista.toArray();
+					boolean roomDouble=getRdbtnDouble().isSelected();
+					boolean roomInside=getRdbtnInside().isSelected();
+					vI.loadRoom(roomDouble, roomInside, extras);
+				}
+			});
+			btnAdd.setBounds(261, 238, 70, 23);
+		}
+		return btnAdd;
+	}
+	private JButton getBtnCancel() {
+		if (btnCancel == null) {
+			btnCancel = new JButton("Cancel");
+			btnCancel.setBounds(341, 238, 75, 23);
+		}
+		return btnCancel;
+	}
+	private JPanel getPnPeople() {
+		if (pnPeople == null) {
+			pnPeople = new JPanel();
+			pnPeople.setBorder(new TitledBorder(null, "People", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			pnPeople.setBounds(277, 11, 145, 216);
+			pnPeople.setLayout(null);
+			pnPeople.add(getSpPeople());
+			pnPeople.add(getTextField());
+			pnPeople.add(getBtnAdd_1());
+			pnPeople.add(getLblAge());
+			pnPeople.add(getBtnRemove());
+		}
+		return pnPeople;
+	}
+	private JScrollPane getSpPeople() {
+		if (spPeople == null) {
+			spPeople = new JScrollPane();
+			spPeople.setBounds(10, 72, 125, 102);
+			spPeople.setViewportView(getListaPeople());
+		}
+		return spPeople;
+	}
+	private JList getListaPeople() {
+		if (listaPeople == null) {
+			listaPeople = new JList();
+		}
+		return listaPeople;
+	}
+	private JTextField getTextField() {
+		if (textField == null) {
+			textField = new JTextField();
+			textField.setBounds(10, 42, 45, 23);
+			textField.setColumns(10);
+		}
+		return textField;
+	}
+	private JButton getBtnAdd_1() {
+		if (btnAdd_1 == null) {
+			btnAdd_1 = new JButton("Add");
+			btnAdd_1.setBounds(76, 42, 59, 23);
+		}
+		return btnAdd_1;
+	}
+	private JLabel getLblAge() {
+		if (lblAge == null) {
+			lblAge = new JLabel("Age");
+			lblAge.setAlignmentX(Component.CENTER_ALIGNMENT);
+			lblAge.setBounds(10, 26, 45, 14);
+		}
+		return lblAge;
+	}
+	private JButton getBtnRemove() {
+		if (btnRemove == null) {
+			btnRemove = new JButton("Remove");
+			btnRemove.setBounds(30, 185, 89, 20);
+		}
+		return btnRemove;
+	}
+}

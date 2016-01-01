@@ -1,2 +1,6 @@
 1451490373810	Rename local variable 'fechasSalida'
 1451491668615	Rename local variable 'inic'
+1451567749566	Delete element
+1451583666092	Rename local variable 'roomType'
+1451587507087	Rename field 'camaExtra'
+1451590769584	Encapsulate field 'extras'

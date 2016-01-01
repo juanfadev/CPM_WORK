@@ -1,0 +1,138 @@
+package igu;
+
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+import logic.Catalog;
+import logic.Cruise;
+import logic.Pedido;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultListModel;
+import javax.swing.JComboBox;
+import javax.swing.JScrollPane;
+import javax.swing.border.TitledBorder;
+
+public class VentanaAddRoom extends JDialog {
+
+	private final JPanel contentPanel = new JPanel();
+	private VentanaInicio vI;
+	private Pedido pedido;
+	private Cruise crucero;
+	private final ButtonGroup btnGroupLocal = new ButtonGroup();
+	private final ButtonGroup btnGroupType = new ButtonGroup();
+	private JComboBox cbExtras;
+	private JScrollPane spExtras;
+	private JPanel pnExtras;
+	private Object listaExtra;
+	private DefaultListModel modeloLista;
+
+	/**
+	 * Create the dialog.
+	 */
+	public VentanaAddRoom(VentanaInicio vI, Pedido pedido, Cruise crucero) {
+		this.vI=vI;
+		this.pedido=pedido;
+		this.crucero=crucero;
+		setResizable(false);
+		setTitle("Add Room");
+		setBounds(100, 100, 450, 300);
+		getContentPane().setLayout(new BorderLayout());
+		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		contentPanel.setLayout(null);
+		{
+			JLabel lblTypeOfRoom = new JLabel("Type of Room: ");
+			lblTypeOfRoom.setBounds(34, 14, 74, 14);
+			contentPanel.add(lblTypeOfRoom);
+		}
+		{
+			JRadioButton rdbtnDoublePeople = new JRadioButton("Double (2 people)");
+			btnGroupType.add(rdbtnDoublePeople);
+			rdbtnDoublePeople.setBounds(113, 10, 111, 23);
+			contentPanel.add(rdbtnDoublePeople);
+		}
+		{
+			JRadioButton rdbtnFamiliarPeople = new JRadioButton("Familiar (4 People)");
+			btnGroupType.add(rdbtnFamiliarPeople);
+			rdbtnFamiliarPeople.setBounds(229, 10, 113, 23);
+			contentPanel.add(rdbtnFamiliarPeople);
+		}
+		{
+			JLabel lblLocalization = new JLabel("Localization: ");
+			lblLocalization.setBounds(34, 39, 63, 14);
+			contentPanel.add(lblLocalization);
+		}
+		{
+			JRadioButton rdbtnInside = new JRadioButton("Inside");
+			btnGroupLocal.add(rdbtnInside);
+			rdbtnInside.setBounds(113, 35, 61, 23);
+			contentPanel.add(rdbtnInside);
+		}
+		{
+			JRadioButton rdbtnOutside = new JRadioButton("Outside");
+			btnGroupLocal.add(rdbtnOutside);
+			rdbtnOutside.setBounds(229, 36, 63, 23);
+			contentPanel.add(rdbtnOutside);
+		}
+		contentPanel.add(getPnExtras());
+		{
+			JPanel buttonPane = new JPanel();
+			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
+			getContentPane().add(buttonPane, BorderLayout.SOUTH);
+			{
+				JButton addButton = new JButton("Add");
+				addButton.setActionCommand("OK");
+				buttonPane.add(addButton);
+				getRootPane().setDefaultButton(addButton);
+			}
+			{
+				JButton cancelButton = new JButton("Cancel");
+				cancelButton.setActionCommand("Cancel");
+				buttonPane.add(cancelButton);
+			}
+		}
+	}
+	private JComboBox getCbExtras() {
+		if (cbExtras == null) {
+			cbExtras = new JComboBox();
+			cbExtras.setBounds(22, 30, 95, 20);
+		}
+		return cbExtras;
+	}
+	private JScrollPane getSpExtras() {
+		if (spExtras == null) {
+			spExtras = new JScrollPane();
+			spExtras.setBounds(175, 11, 229, 117);
+			spExtras.setRowHeaderView(getListaExtra());
+		}
+		return spExtras;
+	}
+	
+	private JList getListaExtra() {
+		if (listaExtra == null) {
+			modeloLista = new DefaultListModel<>();
+			listaExtra = new JList(modeloLista);
+		}
+		return listaExtra;
+	}
+	
+	private JPanel getPnExtras() {
+		if (pnExtras == null) {
+			pnExtras = new JPanel();
+			pnExtras.setBorder(new TitledBorder(null, "Extras: ", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			pnExtras.setBounds(20, 88, 414, 139);
+			pnExtras.setLayout(null);
+			pnExtras.add(getCbExtras());
+			pnExtras.add(getSpExtras());
+		}
+		return pnExtras;
+	}
+}
