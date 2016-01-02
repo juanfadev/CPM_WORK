@@ -12,7 +12,9 @@ import logic.Catalog;
 import logic.Cruise;
 import logic.Extra;
 import logic.Pedido;
+import logic.Registro;
 import logic.Room;
+import logic.Usuario;
 
 import java.awt.GridLayout;
 import javax.swing.JToggleButton;
@@ -49,6 +51,12 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.ImageIcon;
+import javax.swing.JPasswordField;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.RowSpec;
+import com.jgoodies.forms.layout.FormSpecs;
+import javax.swing.BoxLayout;
 
 public class VentanaInicio extends JFrame {
 
@@ -66,6 +74,7 @@ public class VentanaInicio extends JFrame {
 	private Catalog catalogo;
 	private Pedido pedido;
 	private Cruise crucero;
+	private Registro register;
 	private JPanel pnSearch;
 	private JPanel pnRooms;
 	private JPanel pnConfirmation;
@@ -117,8 +126,36 @@ public class VentanaInicio extends JFrame {
 	private VentanaAddRoom vAR;
 	private JPanel pnRecommended;
 	private JPanel pnSearchButton;
-	private JButton btnSearch_2;
-	private JLabel label;
+	private JButton btnSearch_1;
+	private JLabel lblOffer1;
+	private JLabel lblOffer2;
+	private JPanel pnPersonalData;
+	private JPanel pnPayout;
+	private JButton btnPrintReceipt;
+	private JLabel lblBookingSucceed;
+	private JPanel pnPersonalButtons;
+	private JButton btnRegister;
+	private JButton btnNext_1;
+	private JPanel pnLogIn;
+	private JPanel pnRegister;
+	private JLabel lblIdLogin;
+	private JTextField txIDLogin;
+	private JLabel lblPasswordLogIn;
+	private JButton btnLogIn;
+	private JPasswordField passwordLogIn;
+	private JLabel lblName;
+	private JLabel lblSurname;
+	private JLabel lblId;
+	private JLabel lblPhoneNumber;
+	private JLabel lblEmail;
+	private JLabel lblPassword;
+	private JTextField txID;
+	private JTextField txName;
+	private JTextField txSurname;
+	private JTextField txEmail;
+	private JTextField txPhone;
+	private JPasswordField passwordRegister;
+	private JButton btnContinueWithoutRegistering;
 
 	/**
 	 * Launch the application.
@@ -144,7 +181,7 @@ public class VentanaInicio extends JFrame {
 		pedido = new Pedido();
 		restart();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 650, 380);
+		setBounds(100, 100, 712, 380);
 		setJMenuBar(getMenuBar_1());
 		pnPrincipal = new JPanel();
 		pnPrincipal.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -186,6 +223,7 @@ public class VentanaInicio extends JFrame {
 	private JToggleButton getTglbtnRooms() {
 		if (tglbtnRooms == null) {
 			tglbtnRooms = new JToggleButton("Rooms");
+			tglbtnRooms.setEnabled(false);
 			tglbtnRooms.setMnemonic('r');
 			tglbtnRooms.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
@@ -200,7 +238,8 @@ public class VentanaInicio extends JFrame {
 	private JToggleButton getTglbtnPersonalData() {
 		if (tglbtnPersonalData == null) {
 			tglbtnPersonalData = new JToggleButton("Personal Data");
-			tglbtnPersonalData.setMnemonic('r');
+			tglbtnPersonalData.setEnabled(false);
+			tglbtnPersonalData.setMnemonic('e');
 			tglbtnPersonalData.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					toggleAllButtons(tglbtnPersonalData);
@@ -214,6 +253,7 @@ public class VentanaInicio extends JFrame {
 	private JToggleButton getTglbtnConfirmation() {
 		if (tglbtnConfirmation == null) {
 			tglbtnConfirmation = new JToggleButton("Confirmation");
+			tglbtnConfirmation.setEnabled(false);
 			tglbtnConfirmation.setMnemonic('c');
 			tglbtnConfirmation.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
@@ -228,6 +268,7 @@ public class VentanaInicio extends JFrame {
 	private JToggleButton getTglbtnPayout() {
 		if (tglbtnPayout == null) {
 			tglbtnPayout = new JToggleButton("Payout");
+			tglbtnPayout.setEnabled(false);
 			tglbtnPayout.setMnemonic('p');
 			tglbtnPayout.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
@@ -261,7 +302,9 @@ public class VentanaInicio extends JFrame {
 			pnCentral.add(getPnSearch(), "panelSearch");
 			pnCentral.add(getPnDetails(), "panelDetails");
 			pnCentral.add(getPnRooms(), "panelRooms");
+			pnCentral.add(getPnPersonalData(), "panelPersonalData");
 			pnCentral.add(getPnConfirmation(), "panelConfirmation");
+			pnCentral.add(getPnPayout(), "panelPayout");
 		}
 		return pnCentral;
 	}
@@ -270,8 +313,8 @@ public class VentanaInicio extends JFrame {
 		if (pnHome == null) {
 			pnHome = new JPanel();
 			pnHome.setLayout(new BorderLayout(0, 0));
-			pnHome.add(getPnSearchButton(), BorderLayout.EAST);
 			pnHome.add(getPnRecommended(), BorderLayout.CENTER);
+			pnHome.add(getPnSearchButton(), BorderLayout.EAST);
 		}
 		return pnHome;
 	}
@@ -304,58 +347,56 @@ public class VentanaInicio extends JFrame {
 		// Save catalog to files
 		// Save registro to files
 	}
-	
+
 	private void loadDetails(String string) {
-		if(crucero.isAptoMenores()){
+		if (crucero.isAptoMenores()) {
 			lblAptoMenores.setText("Apto para menores");
 		}
-		lblBarco.setText("Barco"+": " + crucero.getBarco().getDenominacion());
-		lblDenominacion.setText("Crucero" +": " + crucero.getDenominacion());
+		lblBarco.setText("Barco" + ": " + crucero.getBarco().getDenominacion());
+		lblDenominacion.setText("Crucero" + ": " + crucero.getDenominacion());
 		lblItinerario.setText("Itinerario" + ": " + crucero.getItinerario());
-		lblDuracion.setText("Duración"+": "+((Integer)crucero.getDuration()).toString());
-		lblZona.setText("Zona"+": " +crucero.getZona());
-		lblSalida.setText("Salida desde" +": "+ crucero.getPuertoSalida());
+		lblDuracion.setText("Duración" + ": " + ((Integer) crucero.getDuration()).toString());
+		lblZona.setText("Zona" + ": " + crucero.getZona());
+		lblSalida.setText("Salida desde" + ": " + crucero.getPuertoSalida());
 		taDescripcion.setText(crucero.getDescripcion());
-		lblDate.setText("Fecha de salida" + ": " +string);
-		
+		lblDate.setText("Fecha de salida" + ": " + string);
+
 	}
-	public void loadRoom(Room room ){
+
+	public void loadRoom(Room room) {
 		pedido.addRoom(room);
-		if (pedido.personasCorrectas()){
-		vAR.dispose();
-		loadTable();
-		}
-		else{
-			pedido.removeRoom(pedido.getRooms().size()-1);
-			JOptionPane.showMessageDialog(null, "There are too much people for this room. Please rearrange it before continue");
+		if (pedido.personasCorrectas()) {
+			vAR.dispose();
+			loadTable();
+		} else {
+			pedido.removeRoom(pedido.getRooms().size() - 1);
+			JOptionPane.showMessageDialog(null,
+					"There are too much people for this room. Please rearrange it before continue");
 		}
 	}
-	
-	private void loadTable(){
+
+	private void loadTable() {
 		modeloRooms.getDataVector().clear();
 		Object[] nuevaFila = new Object[3];
-		for (Room r:pedido.getRooms()){
-			if (r.getCam()==r.camDobInt){
-				nuevaFila[0]= "Double";
-				nuevaFila[1]= "Interior";
-			}
-			else if (r.getCam()==r.camDobExt) {
-				nuevaFila[0]="Double";
-				nuevaFila[1]="Exterior";
-			}
-			else if (r.getCam()==r.camFamExt) {
-				nuevaFila[0]="Family";
-				nuevaFila[1]="Exterior";
-			}
-			else if (r.getCam()==r.camFamInt) {
-				nuevaFila[0]="Family";
-				nuevaFila[1]="Interior";
+		for (Room r : pedido.getRooms()) {
+			if (r.getCam() == r.camDobInt) {
+				nuevaFila[0] = "Double";
+				nuevaFila[1] = "Interior";
+			} else if (r.getCam() == r.camDobExt) {
+				nuevaFila[0] = "Double";
+				nuevaFila[1] = "Exterior";
+			} else if (r.getCam() == r.camFamExt) {
+				nuevaFila[0] = "Family";
+				nuevaFila[1] = "Exterior";
+			} else if (r.getCam() == r.camFamInt) {
+				nuevaFila[0] = "Family";
+				nuevaFila[1] = "Interior";
 			}
 			nuevaFila[2] = r.getExtras();
 			modeloRooms.addRow(nuevaFila);
 		}
 		modeloRooms.fireTableDataChanged();
-		
+
 	}
 
 	/*
@@ -477,8 +518,8 @@ public class VentanaInicio extends JFrame {
 				public void actionPerformed(ActionEvent arg0) {
 					try {
 						modeloTabla.getDataVector().clear();
-						modeloTabla=catalogo.searchZonaDate(getTxtDateFrom().getText(), getTxtDateTo().getText(),
-								getCbDest().getSelectedItem().toString(),modeloTabla);
+						modeloTabla = catalogo.searchZonaDate(getTxtDateFrom().getText(), getTxtDateTo().getText(),
+								getCbDest().getSelectedItem().toString(), modeloTabla);
 						modeloTabla.fireTableDataChanged();
 					} catch (ParseException e) {
 						e.printStackTrace();
@@ -495,14 +536,15 @@ public class VentanaInicio extends JFrame {
 			btnDetails.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					int row = tCruises.getSelectedRow();
-					crucero = catalogo.getCruise((String) ((Vector) modeloTabla.getDataVector().elementAt(row)).elementAt(0));
+					crucero = catalogo
+							.getCruise((String) ((Vector) modeloTabla.getDataVector().elementAt(row)).elementAt(0));
 					loadDetails((String) ((Vector) modeloTabla.getDataVector().elementAt(row)).elementAt(4));
 					((CardLayout) pnCentral.getLayout()).show(pnCentral, "panelDetails");
-					
-					
+					//getLblPicture().setIcon(
+					//		new ImageIcon(VentanaInicio.class.getResource(crucero.getImgRoute())));
+
 				}
 
-				
 			});
 			btnDetails.setHorizontalAlignment(SwingConstants.RIGHT);
 		}
@@ -612,24 +654,27 @@ public class VentanaInicio extends JFrame {
 
 	private JTable getTCruises() {
 		if (tCruises == null) {
-			String[] nombreColumnas = { "Name", "Starting Point", "Duration", "Destinations","Date" };
+			String[] nombreColumnas = { "Name", "Starting Point", "Duration", "Destinations", "Date" };
 			modeloTabla = new ModeloNoEditable(nombreColumnas, 0);
 			tCruises = new JTable(modeloTabla);
 		}
 		return tCruises;
 	}
+
 	private JButton getBtnBook() {
 		if (btnBook == null) {
 			btnBook = new JButton("Book Now");
 			btnBook.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					((CardLayout) pnCentral.getLayout()).show(pnCentral, "panelRooms");
+					getTglbtnRooms().setEnabled(true);
+					getTglbtnRooms().doClick();
 					pedido.setCrucero(catalogo.getCruise(lblDenominacion.getText()));
 				}
 			});
 		}
 		return btnBook;
 	}
+
 	private JScrollPane getScCruises() {
 		if (scCruises == null) {
 			scCruises = new JScrollPane();
@@ -637,24 +682,28 @@ public class VentanaInicio extends JFrame {
 		}
 		return scCruises;
 	}
+
 	private JButton getBtnPrev() {
 		if (btnPrev == null) {
 			btnPrev = new JButton("Previous Image");
 		}
 		return btnPrev;
 	}
+
 	private JButton getBtnNext() {
 		if (btnNext == null) {
 			btnNext = new JButton("Next Image");
 		}
 		return btnNext;
 	}
+
 	private JLabel getLblPicture() {
 		if (lblPicture == null) {
 			lblPicture = new JLabel("");
 		}
 		return lblPicture;
 	}
+
 	private JLabel getLblDenominacion() {
 		if (lblDenominacion == null) {
 			lblDenominacion = new JLabel("");
@@ -662,6 +711,7 @@ public class VentanaInicio extends JFrame {
 		}
 		return lblDenominacion;
 	}
+
 	private JLabel getLblZona() {
 		if (lblZona == null) {
 			lblZona = new JLabel("");
@@ -669,6 +719,7 @@ public class VentanaInicio extends JFrame {
 		}
 		return lblZona;
 	}
+
 	private JLabel getLblSalida() {
 		if (lblSalida == null) {
 			lblSalida = new JLabel("");
@@ -676,6 +727,7 @@ public class VentanaInicio extends JFrame {
 		}
 		return lblSalida;
 	}
+
 	private JLabel getLblItinerario() {
 		if (lblItinerario == null) {
 			lblItinerario = new JLabel("");
@@ -683,6 +735,7 @@ public class VentanaInicio extends JFrame {
 		}
 		return lblItinerario;
 	}
+
 	private JLabel getLblAptoMenores() {
 		if (lblAptoMenores == null) {
 			lblAptoMenores = new JLabel("");
@@ -690,6 +743,7 @@ public class VentanaInicio extends JFrame {
 		}
 		return lblAptoMenores;
 	}
+
 	private JLabel getLblDuracion() {
 		if (lblDuracion == null) {
 			lblDuracion = new JLabel("");
@@ -697,6 +751,7 @@ public class VentanaInicio extends JFrame {
 		}
 		return lblDuracion;
 	}
+
 	private JLabel getLblBarco() {
 		if (lblBarco == null) {
 			lblBarco = new JLabel("");
@@ -704,6 +759,7 @@ public class VentanaInicio extends JFrame {
 		}
 		return lblBarco;
 	}
+
 	private JLabel getLblDate() {
 		if (lblDate == null) {
 			lblDate = new JLabel("");
@@ -711,6 +767,7 @@ public class VentanaInicio extends JFrame {
 		}
 		return lblDate;
 	}
+
 	private JTextArea getTaDescripcion() {
 		if (taDescripcion == null) {
 			taDescripcion = new JTextArea();
@@ -719,6 +776,7 @@ public class VentanaInicio extends JFrame {
 		}
 		return taDescripcion;
 	}
+
 	private JPanel getPnIn() {
 		if (pnIn == null) {
 			pnIn = new JPanel();
@@ -733,6 +791,7 @@ public class VentanaInicio extends JFrame {
 		}
 		return pnIn;
 	}
+
 	private JScrollPane getSpRooms() {
 		if (spRooms == null) {
 			spRooms = new JScrollPane();
@@ -740,25 +799,50 @@ public class VentanaInicio extends JFrame {
 		}
 		return spRooms;
 	}
+
 	private JTable getTRooms() {
 		if (tRooms == null) {
-			String[] nombreColumnas = { "Type of Room", "Location", "Room Extras"};
+			String[] nombreColumnas = { "Type of Room", "Location", "Room Extras" };
 			modeloRooms = new ModeloNoEditable(nombreColumnas, 0);
 			tRooms = new JTable(modeloRooms);
 		}
 		return tRooms;
 	}
+
 	private JPanel getPnRoomBtn() {
 		if (pnRoomBtn == null) {
 			pnRoomBtn = new JPanel();
-			pnRoomBtn.add(getBtnAddRoom());
-			pnRoomBtn.add(getBtnRemove());
+			GridBagLayout gbl_pnRoomBtn = new GridBagLayout();
+			gbl_pnRoomBtn.columnWidths = new int[] { 198, 79, 71, 67, 0, 0, 0, 0, 0, 0 };
+			gbl_pnRoomBtn.rowHeights = new int[] { 23, 0 };
+			gbl_pnRoomBtn.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+					Double.MIN_VALUE };
+			gbl_pnRoomBtn.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
+			pnRoomBtn.setLayout(gbl_pnRoomBtn);
+			GridBagConstraints gbc_btnAddRoom = new GridBagConstraints();
+			gbc_btnAddRoom.anchor = GridBagConstraints.NORTHWEST;
+			gbc_btnAddRoom.insets = new Insets(0, 0, 0, 5);
+			gbc_btnAddRoom.gridx = 1;
+			gbc_btnAddRoom.gridy = 0;
+			pnRoomBtn.add(getBtnAddRoom(), gbc_btnAddRoom);
+			GridBagConstraints gbc_btnRemove = new GridBagConstraints();
+			gbc_btnRemove.anchor = GridBagConstraints.NORTHWEST;
+			gbc_btnRemove.insets = new Insets(0, 0, 0, 5);
+			gbc_btnRemove.gridx = 2;
+			gbc_btnRemove.gridy = 0;
+			pnRoomBtn.add(getBtnRemove(), gbc_btnRemove);
+			GridBagConstraints gbc_btnNext_1 = new GridBagConstraints();
+			gbc_btnNext_1.anchor = GridBagConstraints.NORTHWEST;
+			gbc_btnNext_1.gridx = 8;
+			gbc_btnNext_1.gridy = 0;
+			pnRoomBtn.add(getBtnNext_1(), gbc_btnNext_1);
 		}
 		return pnRoomBtn;
 	}
+
 	private JButton getBtnAddRoom() {
 		if (btnAddRoom == null) {
-			VentanaInicio vI=this;
+			VentanaInicio vI = this;
 			btnAddRoom = new JButton("AddRoom");
 			btnAddRoom.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
@@ -771,6 +855,7 @@ public class VentanaInicio extends JFrame {
 		}
 		return btnAddRoom;
 	}
+
 	private JButton getBtnRemove() {
 		if (btnRemove == null) {
 			btnRemove = new JButton("Remove");
@@ -787,54 +872,416 @@ public class VentanaInicio extends JFrame {
 	public Catalog getCatalogo() {
 		return catalogo;
 	}
-	
+
 	private JPanel getPnRecommended() {
 		if (pnRecommended == null) {
 			pnRecommended = new JPanel();
+			pnRecommended.setLayout(new GridLayout(1, 0, 0, 0));
+			pnRecommended.add(getLblOffer1());
+			pnRecommended.add(getLblOffer2());
 		}
 		return pnRecommended;
 	}
+
 	private JPanel getPnSearchButton() {
 		if (pnSearchButton == null) {
 			pnSearchButton = new JPanel();
 			GridBagLayout gbl_pnSearchButton = new GridBagLayout();
-			gbl_pnSearchButton.columnWidths = new int[]{65, 0};
-			gbl_pnSearchButton.rowHeights = new int[]{143, 0, 0, 143, 0};
-			gbl_pnSearchButton.columnWeights = new double[]{0.0, Double.MIN_VALUE};
-			gbl_pnSearchButton.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+			gbl_pnSearchButton.columnWidths = new int[] { 65, 0 };
+			gbl_pnSearchButton.rowHeights = new int[] { 23, 0, 0, 0, 0, 0 };
+			gbl_pnSearchButton.columnWeights = new double[] { 0.0, Double.MIN_VALUE };
+			gbl_pnSearchButton.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 			pnSearchButton.setLayout(gbl_pnSearchButton);
-			GridBagConstraints gbc_label = new GridBagConstraints();
-			gbc_label.insets = new Insets(0, 0, 5, 0);
-			gbc_label.gridx = 0;
-			gbc_label.gridy = 0;
-			pnSearchButton.add(getLabel(), gbc_label);
-			GridBagConstraints gbc_btnSearch_2 = new GridBagConstraints();
-			gbc_btnSearch_2.gridheight = 2;
-			gbc_btnSearch_2.fill = GridBagConstraints.BOTH;
-			gbc_btnSearch_2.insets = new Insets(0, 0, 5, 0);
-			gbc_btnSearch_2.gridx = 0;
-			gbc_btnSearch_2.gridy = 1;
-			pnSearchButton.add(getBtnSearch_2(), gbc_btnSearch_2);
+			GridBagConstraints gbc_btnSearch_1 = new GridBagConstraints();
+			gbc_btnSearch_1.insets = new Insets(0, 0, 5, 0);
+			gbc_btnSearch_1.anchor = GridBagConstraints.NORTHWEST;
+			gbc_btnSearch_1.gridx = 0;
+			gbc_btnSearch_1.gridy = 3;
+			pnSearchButton.add(getBtnSearch_1(), gbc_btnSearch_1);
 		}
 		return pnSearchButton;
 	}
-	private JButton getBtnSearch_2() {
-		if (btnSearch_2 == null) {
-			btnSearch_2 = new JButton("Search");
-			btnSearch_2.setIcon(new ImageIcon(VentanaInicio.class.getResource("/img/magnifying-glass-481818_960_720.png")));
-			btnSearch_2.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+
+	private JButton getBtnSearch_1() {
+		if (btnSearch_1 == null) {
+			btnSearch_1 = new JButton("");
+			btnSearch_1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					getTglbtnSearch().doClick();
+				}
+			});
+			btnSearch_1.setIcon(
+					new ImageIcon(VentanaInicio.class.getResource("/img/encontrar-busqueda-zoom-icono-6513-96.png")));
+		}
+		return btnSearch_1;
+	}
+
+	private JLabel getLblOffer1() {
+		if (lblOffer1 == null) {
+			lblOffer1 = new JLabel("");
+		}
+		return lblOffer1;
+	}
+
+	private JLabel getLblOffer2() {
+		if (lblOffer2 == null) {
+			lblOffer2 = new JLabel("");
+		}
+		return lblOffer2;
+	}
+
+	private JPanel getPnPersonalData() {
+		if (pnPersonalData == null) {
+			pnPersonalData = new JPanel();
+			pnPersonalData.setLayout(new BorderLayout(0, 0));
+			pnPersonalData.add(getPnPersonalButtons(), BorderLayout.SOUTH);
+			pnPersonalData.add(getPnLogIn(), BorderLayout.NORTH);
+			pnPersonalData.add(getPnRegister(), BorderLayout.CENTER);
+		}
+		return pnPersonalData;
+	}
+
+	private JPanel getPnPayout() {
+		if (pnPayout == null) {
+			pnPayout = new JPanel();
+			pnPayout.add(getLblBookingSucceed());
+			pnPayout.add(getBtnPrintReceipt());
+		}
+		return pnPayout;
+	}
+
+	private JButton getBtnPrintReceipt() {
+		if (btnPrintReceipt == null) {
+			btnPrintReceipt = new JButton("Print receipt");
+		}
+		return btnPrintReceipt;
+	}
+
+	private JLabel getLblBookingSucceed() {
+		if (lblBookingSucceed == null) {
+			lblBookingSucceed = new JLabel("Booking Succeed");
+		}
+		return lblBookingSucceed;
+	}
+
+	private JPanel getPnPersonalButtons() {
+		if (pnPersonalButtons == null) {
+			pnPersonalButtons = new JPanel();
+			GridBagLayout gbl_pnPersonalButtons = new GridBagLayout();
+			gbl_pnPersonalButtons.columnWidths = new int[] { 73, 173, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+					0 };
+			gbl_pnPersonalButtons.rowHeights = new int[] { 23, 0 };
+			gbl_pnPersonalButtons.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+					0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+			gbl_pnPersonalButtons.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
+			pnPersonalButtons.setLayout(gbl_pnPersonalButtons);
+			GridBagConstraints gbc_btnRegister = new GridBagConstraints();
+			gbc_btnRegister.anchor = GridBagConstraints.WEST;
+			gbc_btnRegister.insets = new Insets(0, 0, 0, 5);
+			gbc_btnRegister.gridx = 7;
+			gbc_btnRegister.gridy = 0;
+			pnPersonalButtons.add(getBtnRegister(), gbc_btnRegister);
+			GridBagConstraints gbc_btnContinueWithoutRegistering = new GridBagConstraints();
+			gbc_btnContinueWithoutRegistering.insets = new Insets(0, 0, 0, 5);
+			gbc_btnContinueWithoutRegistering.gridx = 12;
+			gbc_btnContinueWithoutRegistering.gridy = 0;
+			pnPersonalButtons.add(getBtnContinueWithoutRegistering(), gbc_btnContinueWithoutRegistering);
+		}
+		return pnPersonalButtons;
+	}
+
+	private JButton getBtnRegister() {
+		if (btnRegister == null) {
+			btnRegister = new JButton("Register");
+			btnRegister.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					register.addUser(
+							new Usuario(getTxID().getText(), passwordRegister.getPassword(), getTxName().getText(),
+									getTxSurname().getText(), getTxPhone().getText(), getTxEmail().getText()));
+					JOptionPane.showMessageDialog(null, "You can now Log In");
 				}
 			});
 		}
-		return btnSearch_2;
+		return btnRegister;
 	}
-	private JLabel getLabel() {
-		if (label == null) {
-			label = new JLabel("");
-			label.setIcon(new ImageIcon(VentanaInicio.class
-					.getResource("/img/lupa.JPG")));
+
+	private JButton getBtnNext_1() {
+		if (btnNext_1 == null) {
+			btnNext_1 = new JButton("Next->");
+			btnNext_1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					getTglbtnPersonalData().setEnabled(true);
+					getTglbtnPersonalData().doClick();
+					register = new Registro();
+
+				}
+			});
 		}
-		return label;
+		return btnNext_1;
+	}
+
+	private JPanel getPnLogIn() {
+		if (pnLogIn == null) {
+			pnLogIn = new JPanel();
+			pnLogIn.add(getLblIdLogin());
+			pnLogIn.add(getTxIDLogin());
+			pnLogIn.add(getLblPasswordLogIn());
+			pnLogIn.add(getPasswordLogIn());
+			pnLogIn.add(getBtnLogIn());
+		}
+		return pnLogIn;
+	}
+
+	private JPanel getPnRegister() {
+		if (pnRegister == null) {
+			pnRegister = new JPanel();
+			GridBagLayout gbl_pnRegister = new GridBagLayout();
+			gbl_pnRegister.columnWidths = new int[] { 31, 49, 117, 56, 77, 31, 119, 0, 0, 0, 0, 0, 0, 0 };
+			gbl_pnRegister.rowHeights = new int[] { 56, 20, 31, 20, 31, 20, 0 };
+			gbl_pnRegister.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+					0.0, Double.MIN_VALUE };
+			gbl_pnRegister.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+			pnRegister.setLayout(gbl_pnRegister);
+			GridBagConstraints gbc_lblName = new GridBagConstraints();
+			gbc_lblName.anchor = GridBagConstraints.WEST;
+			gbc_lblName.insets = new Insets(0, 0, 5, 5);
+			gbc_lblName.gridx = 1;
+			gbc_lblName.gridy = 1;
+			pnRegister.add(getLblName(), gbc_lblName);
+			GridBagConstraints gbc_txName = new GridBagConstraints();
+			gbc_txName.gridwidth = 2;
+			gbc_txName.anchor = GridBagConstraints.NORTH;
+			gbc_txName.fill = GridBagConstraints.HORIZONTAL;
+			gbc_txName.insets = new Insets(0, 0, 5, 5);
+			gbc_txName.gridx = 2;
+			gbc_txName.gridy = 1;
+			pnRegister.add(getTxName(), gbc_txName);
+			GridBagConstraints gbc_lblId = new GridBagConstraints();
+			gbc_lblId.anchor = GridBagConstraints.WEST;
+			gbc_lblId.insets = new Insets(0, 0, 5, 5);
+			gbc_lblId.gridx = 6;
+			gbc_lblId.gridy = 1;
+			pnRegister.add(getLblId(), gbc_lblId);
+			GridBagConstraints gbc_txID = new GridBagConstraints();
+			gbc_txID.gridwidth = 4;
+			gbc_txID.anchor = GridBagConstraints.NORTH;
+			gbc_txID.fill = GridBagConstraints.HORIZONTAL;
+			gbc_txID.insets = new Insets(0, 0, 5, 5);
+			gbc_txID.gridx = 8;
+			gbc_txID.gridy = 1;
+			pnRegister.add(getTxID(), gbc_txID);
+			GridBagConstraints gbc_lblSurname = new GridBagConstraints();
+			gbc_lblSurname.anchor = GridBagConstraints.WEST;
+			gbc_lblSurname.insets = new Insets(0, 0, 5, 5);
+			gbc_lblSurname.gridx = 1;
+			gbc_lblSurname.gridy = 3;
+			pnRegister.add(getLblSurname(), gbc_lblSurname);
+			GridBagConstraints gbc_txSurname = new GridBagConstraints();
+			gbc_txSurname.gridwidth = 2;
+			gbc_txSurname.anchor = GridBagConstraints.NORTH;
+			gbc_txSurname.fill = GridBagConstraints.HORIZONTAL;
+			gbc_txSurname.insets = new Insets(0, 0, 5, 5);
+			gbc_txSurname.gridx = 2;
+			gbc_txSurname.gridy = 3;
+			pnRegister.add(getTxSurname(), gbc_txSurname);
+			GridBagConstraints gbc_lblPhoneNumber = new GridBagConstraints();
+			gbc_lblPhoneNumber.anchor = GridBagConstraints.WEST;
+			gbc_lblPhoneNumber.insets = new Insets(0, 0, 5, 5);
+			gbc_lblPhoneNumber.gridx = 6;
+			gbc_lblPhoneNumber.gridy = 3;
+			pnRegister.add(getLblPhoneNumber(), gbc_lblPhoneNumber);
+			GridBagConstraints gbc_txPhone = new GridBagConstraints();
+			gbc_txPhone.gridwidth = 4;
+			gbc_txPhone.anchor = GridBagConstraints.NORTH;
+			gbc_txPhone.fill = GridBagConstraints.HORIZONTAL;
+			gbc_txPhone.insets = new Insets(0, 0, 5, 5);
+			gbc_txPhone.gridx = 8;
+			gbc_txPhone.gridy = 3;
+			pnRegister.add(getTxPhone(), gbc_txPhone);
+			GridBagConstraints gbc_lblEmail = new GridBagConstraints();
+			gbc_lblEmail.anchor = GridBagConstraints.WEST;
+			gbc_lblEmail.insets = new Insets(0, 0, 0, 5);
+			gbc_lblEmail.gridx = 1;
+			gbc_lblEmail.gridy = 5;
+			pnRegister.add(getLblEmail(), gbc_lblEmail);
+			GridBagConstraints gbc_txEmail = new GridBagConstraints();
+			gbc_txEmail.gridwidth = 2;
+			gbc_txEmail.anchor = GridBagConstraints.NORTH;
+			gbc_txEmail.fill = GridBagConstraints.HORIZONTAL;
+			gbc_txEmail.insets = new Insets(0, 0, 0, 5);
+			gbc_txEmail.gridx = 2;
+			gbc_txEmail.gridy = 5;
+			pnRegister.add(getTxEmail(), gbc_txEmail);
+			GridBagConstraints gbc_lblPassword = new GridBagConstraints();
+			gbc_lblPassword.anchor = GridBagConstraints.WEST;
+			gbc_lblPassword.insets = new Insets(0, 0, 0, 5);
+			gbc_lblPassword.gridx = 6;
+			gbc_lblPassword.gridy = 5;
+			pnRegister.add(getLblPassword(), gbc_lblPassword);
+			GridBagConstraints gbc_passwordRegister = new GridBagConstraints();
+			gbc_passwordRegister.insets = new Insets(0, 0, 0, 5);
+			gbc_passwordRegister.gridwidth = 4;
+			gbc_passwordRegister.anchor = GridBagConstraints.NORTH;
+			gbc_passwordRegister.fill = GridBagConstraints.HORIZONTAL;
+			gbc_passwordRegister.gridx = 8;
+			gbc_passwordRegister.gridy = 5;
+			pnRegister.add(getPasswordRegister(), gbc_passwordRegister);
+		}
+		return pnRegister;
+	}
+
+	private JLabel getLblIdLogin() {
+		if (lblIdLogin == null) {
+			lblIdLogin = new JLabel("ID: ");
+		}
+		return lblIdLogin;
+	}
+
+	private JTextField getTxIDLogin() {
+		if (txIDLogin == null) {
+			txIDLogin = new JTextField();
+			txIDLogin.setColumns(9);
+		}
+		return txIDLogin;
+	}
+
+	private JLabel getLblPasswordLogIn() {
+		if (lblPasswordLogIn == null) {
+			lblPasswordLogIn = new JLabel("Password: ");
+		}
+		return lblPasswordLogIn;
+	}
+
+	private JButton getBtnLogIn() {
+		if (btnLogIn == null) {
+			btnLogIn = new JButton("Log In");
+			btnLogIn.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Usuario user = register.getUser(getTxIDLogin().getText(), getPasswordLogIn().getPassword());
+					if (user == null) {
+						JOptionPane.showMessageDialog(null, "ID and password do not match");
+					} else {
+						getTglbtnConfirmation().setEnabled(true);
+						getTglbtnConfirmation().doClick();
+					}
+				}
+			});
+		}
+		return btnLogIn;
+	}
+
+	private JPasswordField getPasswordLogIn() {
+		if (passwordLogIn == null) {
+			passwordLogIn = new JPasswordField();
+			passwordLogIn.setColumns(12);
+		}
+		return passwordLogIn;
+	}
+
+	private JLabel getLblName() {
+		if (lblName == null) {
+			lblName = new JLabel("Name: ");
+		}
+		return lblName;
+	}
+
+	private JLabel getLblSurname() {
+		if (lblSurname == null) {
+			lblSurname = new JLabel("Surname: ");
+		}
+		return lblSurname;
+	}
+
+	private JLabel getLblId() {
+		if (lblId == null) {
+			lblId = new JLabel("ID: ");
+		}
+		return lblId;
+	}
+
+	private JLabel getLblPhoneNumber() {
+		if (lblPhoneNumber == null) {
+			lblPhoneNumber = new JLabel("Phone Number: ");
+		}
+		return lblPhoneNumber;
+	}
+
+	private JLabel getLblEmail() {
+		if (lblEmail == null) {
+			lblEmail = new JLabel("Email: ");
+		}
+		return lblEmail;
+	}
+
+	private JLabel getLblPassword() {
+		if (lblPassword == null) {
+			lblPassword = new JLabel("Password: ");
+		}
+		return lblPassword;
+	}
+
+	private JTextField getTxID() {
+		if (txID == null) {
+			txID = new JTextField();
+			txID.setColumns(10);
+		}
+		return txID;
+	}
+
+	private JTextField getTxName() {
+		if (txName == null) {
+			txName = new JTextField();
+			txName.setColumns(10);
+		}
+		return txName;
+	}
+
+	private JTextField getTxSurname() {
+		if (txSurname == null) {
+			txSurname = new JTextField();
+			txSurname.setColumns(10);
+		}
+		return txSurname;
+	}
+
+	private JTextField getTxEmail() {
+		if (txEmail == null) {
+			txEmail = new JTextField();
+			txEmail.setToolTipText("Optional field");
+			txEmail.setColumns(10);
+		}
+		return txEmail;
+	}
+
+	private JTextField getTxPhone() {
+		if (txPhone == null) {
+			txPhone = new JTextField();
+			txPhone.setColumns(10);
+		}
+		return txPhone;
+	}
+
+	private JPasswordField getPasswordRegister() {
+		if (passwordRegister == null) {
+			passwordRegister = new JPasswordField();
+			passwordRegister.setToolTipText("Optional Field");
+		}
+		return passwordRegister;
+	}
+
+	private JButton getBtnContinueWithoutRegistering() {
+		if (btnContinueWithoutRegistering == null) {
+			btnContinueWithoutRegistering = new JButton("Continue Without Registering");
+			btnContinueWithoutRegistering.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					pedido.setUsuario(new Usuario(getTxID().getText(), getTxName().getText(), getTxSurname().getText(),
+							getTxPhone().getText(), getTxEmail().getText()));
+					getTglbtnConfirmation().setEnabled(true);
+					getTglbtnConfirmation().doClick();
+				}
+			});
+			btnContinueWithoutRegistering.setAlignmentX(Component.CENTER_ALIGNMENT);
+		}
+		return btnContinueWithoutRegistering;
 	}
 }

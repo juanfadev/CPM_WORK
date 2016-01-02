@@ -13,6 +13,7 @@ public class Ship {
 	private double precioCamDobExt;
 	private double precioCamFamInt;
 	private double precioCamFamExt;
+	private String imgRoute;
 
 	public String getCodigoBarco() {
 		return codigoBarco;
@@ -117,15 +118,21 @@ public class Ship {
 		this.precioCamDobExt = precioCamDobExt;
 		this.precioCamFamInt = precioCamFamInt;
 		this.precioCamFamExt = precioCamFamExt;
+		imgRoute="/img/"+codigoBarco+"/";
 	}
 
 	public Ship (String codigoBarco){
 		super();
 		this.codigoBarco=codigoBarco;
+		imgRoute="/img/"+codigoBarco+"/";
 		/*this.denominacion = null;
 		this.descripcion = null;
 		this.numeroCamarotes = 0;
 		this.precioCamarotes = 0;*/
+	}
+
+	public String getImgRoute() {
+		return imgRoute;
 	}
 
 	public double precioCamarotes(long camDobInt, long camDobExt,

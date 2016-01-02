@@ -18,6 +18,7 @@ public class Cruise {
 	private Date[] fechasSalida;
 	private Ship barco;
 	private boolean descuento;
+	private String imgRoute;
 
 	public Cruise(String codigoCrucero, String zona, String denominacion, String puertoSalida, String itinerario,
 			String descripcion, boolean aptoMenores, int duration, Date[] fechasSalida, Ship barco) {
@@ -32,6 +33,7 @@ public class Cruise {
 		this.duration = duration;
 		this.fechasSalida = fechasSalida;
 		this.barco=barco;
+		imgRoute="/img/"+codigoCrucero+"/";
 	}
 
 	public String getCodigoCrucero() {
@@ -121,7 +123,9 @@ public class Cruise {
 	public void setDescuento(boolean descuento) {
 		this.descuento = descuento;
 	}
-	
+	public String getImgRoute() {
+		return imgRoute;
+	}
 	
 	
 	/*
@@ -134,6 +138,9 @@ public class Cruise {
 	public String toString(){
 		return denominacion;
 	}
+
+	
+
 	
 	
 }
