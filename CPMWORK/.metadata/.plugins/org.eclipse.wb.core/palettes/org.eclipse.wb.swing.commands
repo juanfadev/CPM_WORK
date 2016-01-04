@@ -10,4 +10,8 @@
 	<moveEntry
 		id="org.eclipse.wb.swing.components javax.swing.JTextArea"
 		category="org.eclipse.wb.swing.components"/>
+	<moveEntry
+		id="org.eclipse.wb.swing.components javax.swing.JLabel"
+		category="org.eclipse.wb.swing.components"
+		nextEntry="org.eclipse.wb.swing.components javax.swing.JTextField"/>
 </commands>

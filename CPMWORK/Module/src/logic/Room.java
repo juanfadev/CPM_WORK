@@ -65,13 +65,13 @@ public class Room {
 		}
 	}
 	public void removePeople(Person person){
-		people.remove(person);
 		if (person.isAdult()){
 			adults--;
 		}
 		else{
 			kids--;
 		}
+		people.remove(person);
 	}
 	public void calculateKidsAdults(){
 		int adults=0;
@@ -104,6 +104,34 @@ public class Room {
 		if (extra.getCodigoExtra().equals(codigoCamaExtra)){
 			camaExtra=false;
 		}
+	}
+	private String camType(){
+		if (cam==1){
+			return "Camarote Doble Interior";
+		}
+		else if (cam==2) {
+			return "Camarote Doble Exterior";
+		}
+		else if (cam==3) {
+			return "Camarote Familiar Interior";
+		}
+		else{
+			return "Camarote Familiar Exterior";
+		}
+	}
+	private String listExtras(){
+		String string="";
+		for (int i=0;i<extras.size();i++){
+			string+=extras.get(i).toString();
+			if (i!=extras.size()-1){
+				string+=", ";
+			}
+		}
+		return string;
+	}
+	@Override
+	public String toString(){
+		return camType() + " / "+ listExtras()+";";
 	}
 	
 }

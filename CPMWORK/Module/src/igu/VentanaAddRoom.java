@@ -17,6 +17,7 @@ import logic.Room;
 
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
@@ -222,25 +223,27 @@ public class VentanaAddRoom extends JDialog {
 			btnAdd = new JButton("Add");
 			btnAdd.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					boolean roomDouble = getRdbtnDouble().isSelected();
-					boolean roomInside = getRdbtnInside().isSelected();
-					if (roomDouble){
-						if (roomInside){
-							room.setCam(1);
+					if (modeloPeople.isEmpty()) {
+						JOptionPane.showMessageDialog(null, "There is no people in the room");
+					} else {
+
+						boolean roomDouble = getRdbtnDouble().isSelected();
+						boolean roomInside = getRdbtnInside().isSelected();
+						if (roomDouble) {
+							if (roomInside) {
+								room.setCam(1);
+							} else {
+								room.setCam(2);
+							}
+						} else {
+							if (roomInside) {
+								room.setCam(3);
+							} else {
+								room.setCam(4);
+							}
 						}
-						else{
-							room.setCam(2);
-						}
+						vI.loadRoom(room);
 					}
-					else {
-						if (roomInside){
-							room.setCam(3);
-						}
-						else {
-							room.setCam(4);
-						}
-					}
-					vI.loadRoom(room);
 				}
 			});
 			btnAdd.setBounds(261, 238, 70, 23);
@@ -302,9 +305,14 @@ public class VentanaAddRoom extends JDialog {
 			btnAdd_1 = new JButton("Add");
 			btnAdd_1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Person person = new Person(Integer.parseInt(txAge.getText()));
-					room.addPeople(person);
-					modeloPeople.addElement(person);
+					if (!crucero.isAptoMenores() && (Integer.parseInt(txAge.getText()) < 16)) {
+						JOptionPane.showMessageDialog(null, "People under 16 are not allowed in this cruise");
+					} else {
+						Person person = new Person(Integer.parseInt(txAge.getText()));
+						room.addPeople(person);
+						modeloPeople.addElement(person);
+					}
+
 				}
 			});
 			btnAdd_1.setBounds(76, 42, 59, 23);
@@ -341,7 +349,7 @@ public class VentanaAddRoom extends JDialog {
 			btnRemoveExtra = new JButton("Remove Extra");
 			btnRemoveExtra.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Extra extra= (Extra) listaExtras.getSelectedValue();
+					Extra extra = (Extra) listaExtras.getSelectedValue();
 					room.removeExtra(extra);
 					modeloLista.removeElement(extra);
 				}

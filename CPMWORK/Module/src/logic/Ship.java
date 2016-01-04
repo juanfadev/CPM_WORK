@@ -118,7 +118,7 @@ public class Ship {
 		this.precioCamDobExt = precioCamDobExt;
 		this.precioCamFamInt = precioCamFamInt;
 		this.precioCamFamExt = precioCamFamExt;
-		imgRoute="/img/"+codigoBarco+"/";
+		imgRoute="/img/"+codigoBarco+".jpg";
 	}
 
 	public Ship (String codigoBarco){

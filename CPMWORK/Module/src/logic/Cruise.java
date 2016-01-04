@@ -33,7 +33,7 @@ public class Cruise {
 		this.duration = duration;
 		this.fechasSalida = fechasSalida;
 		this.barco=barco;
-		imgRoute="/img/"+codigoCrucero+"/";
+		imgRoute="/img/"+codigoCrucero+".jpg";
 	}
 
 	public String getCodigoCrucero() {

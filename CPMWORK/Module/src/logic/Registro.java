@@ -56,7 +56,7 @@ public class Registro {
 	}
 
 	private void grabarFichero(String linea) {
-		String nombreFichero = "files/users.dat";
+		String nombreFichero = "data/users.dat";
 		try {
 			BufferedWriter fichero = new BufferedWriter(new FileWriter(nombreFichero));
 			fichero.write(linea);

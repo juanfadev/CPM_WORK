@@ -8,6 +8,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Random;
 
 import igu.ModeloNoEditable;
 
@@ -16,7 +17,7 @@ public class Catalog {
 	private ArrayList<Cruise> cruises;
 	private ArrayList<Ship> ships;
 	private ArrayList<Extra> extras;
-	private int[] descuento;
+	public static final double descuento=0.15;
 	private ArrayList<String> zonas;
 	private Locale localizacion;
 
@@ -143,12 +144,27 @@ public class Catalog {
 
 	}
 
-	public int[] getDescuento() {
-		return descuento;
-	}
 
-	public void setDescuento(int[] descuento) {
-		this.descuento = descuento;
+	public Cruise[] selectDescuento(){
+		Random random = new Random();
+		int rand1=random.nextInt(cruises.size());
+		int rand2= random.nextInt(cruises.size());
+		while (rand1==rand2) {
+			rand2=random.nextInt(cruises.size());
+		}
+		int[] pos = { rand1, rand2 };
+		Cruise[] cruisesDescuento=new Cruise[2];
+		for (int i=0;i<cruises.size();i++){
+			if (i==pos[0]){
+				cruises.get(i).setDescuento(true);
+				cruisesDescuento[0]=cruises.get(i);
+			}
+			if (i==pos[1]){
+				cruises.get(i).setDescuento(true);
+				cruisesDescuento[1]=cruises.get(i);
+			}
+		}
+		return cruisesDescuento;
 	}
 
 	public ArrayList<String> getZonas() {
@@ -186,6 +202,7 @@ public class Catalog {
 		}
 		return null;
 	}
+	
 
 	public Extra[] getExtras() {
 		return extras.toArray(new Extra[extras.size()]);

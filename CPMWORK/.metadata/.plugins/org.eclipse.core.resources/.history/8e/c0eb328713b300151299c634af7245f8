@@ -1,0 +1,200 @@
+package logic;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.SecureDirectoryStream;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
+
+import igu.ModeloNoEditable;
+
+public class Catalog {
+
+	private ArrayList<Cruise> cruises;
+	private ArrayList<Ship> ships;
+	private ArrayList<Extra> extras;
+	private int descuento;
+	private ArrayList<String> zonas;
+	private Locale localizacion;
+
+	public Catalog(Locale localizacion) {
+		this.localizacion = localizacion;
+		cruises = new ArrayList<>();
+		ships = new ArrayList<>();
+		zonas = new ArrayList<>();
+		try {
+			extras = new ArrayList<>();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		try {
+			start();
+		} catch (IOException e) {
+			System.out.print("Database could not be loaded. ERROR: " + e);
+		}
+	}
+
+	public void start() throws IOException {
+		File cruises = new File("data/cruises.dat");
+		File ships = new File("data/ships.dat");
+		File extras = new File("data/extras.dat");
+		readShips(ships);
+		readCruises(cruises);
+		readExtras(extras);
+	}
+
+	private void readShips(File file) throws IOException {
+		CatalogReader reader = new CatalogReader(file);
+		for (int index = 0; index < reader.getFileSize(); index++) {
+			String[] tokens = reader.processLine(index);
+
+			String codigoBarco = tokens[0];
+			String denominacion = tokens[1];
+			String descripcion = tokens[2];
+			long camDobInt = Long.parseLong(tokens[3]);
+			long camDobExt = Long.parseLong(tokens[4]);
+			long camFamInt = Long.parseLong(tokens[5]);
+			long camFamExt = Long.parseLong(tokens[6]);
+			double precioCamDobInt = Double.parseDouble(tokens[7]);
+			double precioCamDobExt = Double.parseDouble(tokens[8]);
+			double precioCamFamInt = Double.parseDouble(tokens[9]);
+			double precioCamFamExt = Double.parseDouble(tokens[10]);
+			Ship barco = new Ship(codigoBarco, denominacion, descripcion, camDobInt, camDobExt, camFamInt, camFamExt,
+					precioCamDobInt, precioCamDobExt, precioCamFamInt, precioCamFamExt);
+			ships.add(barco);
+		}
+	}
+
+	private void readCruises(File file) throws IOException {
+		CatalogReader reader = new CatalogReader(file);
+		for (int index = 0; index < reader.getFileSize(); index++) {
+			String[] tokens = reader.processLine(index);
+			String codigoCrucero = tokens[0];
+			String zona = tokens[1];
+			if (!zonas.contains(zona)) {
+				zonas.add(zona);
+			}
+			String denominacion = tokens[2];
+			String puertoSalida = tokens[3];
+			String itinerario = tokens[4];
+			String descripcion = tokens[5];
+			boolean aptoMenores;
+			if (tokens[6] == "S") {
+				aptoMenores = Cruise.UNDER16;
+			} else {
+				aptoMenores = Cruise.NOTUNDER16;
+			}
+			int duration = Integer.parseInt(tokens[7]);
+			DateFormat formato = DateFormat.getDateInstance(DateFormat.SHORT, localizacion);
+			String[] fechasString = tokens[8].split("%");
+			ArrayList<Date> fechas = new ArrayList<>();
+			for (String fecha : fechasString) {
+				try {
+					fechas.add(formato.parse(fecha));
+				} catch (ParseException e) {
+					System.out.print("Date format error " + e);
+				}
+			}
+			Date[] fechasSalida = new Date[fechas.size()];
+			fechas.toArray(fechasSalida);
+			String codigoBarco = tokens[9];
+			Ship barco = findBarco(codigoBarco);
+			Cruise crucero = new Cruise(codigoCrucero, zona, denominacion, puertoSalida, itinerario, descripcion,
+					aptoMenores, duration, fechasSalida, barco);
+
+			cruises.add(crucero);
+		}
+	}
+
+	private void readExtras(File file) throws IOException {
+		CatalogReader reader = new CatalogReader(file);
+		for (int index = 0; index < reader.getFileSize(); index++) {
+			String[] tokens = reader.processLine(index);
+			String codigoExtra = tokens[0];
+			String denominacion = tokens[1];
+			double precio = Double.parseDouble(tokens[2]);
+			Extra extra = new Extra(codigoExtra, denominacion, precio);
+			extras.add(extra);
+		}
+	}
+
+	private Ship findBarco(String codigoBarco) {
+		for (Ship barco : ships) {
+			if (barco.getCodigoBarco().equals(codigoBarco)) {
+				return barco;
+			}
+			;
+		}
+		Ship barco = new Ship(codigoBarco);
+		ships.add(barco);
+		return barco;
+	}
+
+	public Cruise getCruise(String name) {
+		for (Cruise c : cruises) {
+			if (name == c.getDenominacion()) {
+				return c;
+			}
+		}
+		return null;
+
+	}
+
+
+	public Cruise[] selectDescuento(){
+		Cruise[] cruisesDescuento=new Cruise[2];
+		descuento
+		int pos=new java.util.Random().nextInt(cruises.size()-2);
+		for (int i=0;i<cruises.size();i++){
+			if (i==pos){
+				cruises.get(i).setDescuento(true);
+				cruises.get(i+1).setDescuento(true);
+			}
+		}
+	}
+
+	public ArrayList<String> getZonas() {
+		return zonas;
+	}
+
+	public ModeloNoEditable searchZonaDate(String start, String end, String zona, ModeloNoEditable modeloTabla) throws ParseException {
+		DateFormat formato = DateFormat.getDateInstance(DateFormat.SHORT, localizacion);
+		Date inicial = formato.parse(start);
+		Date fin = formato.parse(end);
+		Object[] nuevaFila = new Object[6];
+		for (Cruise c : cruises) {
+			if (c.getZona().equals(zona)) {
+				for (Date fecha : c.getFechasSalida()) {
+					if (fecha.after(inicial) && fecha.before(fin)) {
+						nuevaFila[0] = c.getDenominacion();
+						nuevaFila[1] = c.getPuertoSalida();
+						nuevaFila[2] = c.getDuration();
+						nuevaFila[3] = c.getItinerario();
+						nuevaFila[4] = formato.format(fecha);
+						nuevaFila[5] = c.getCodigoCrucero();
+						modeloTabla.addRow(nuevaFila);
+					}
+				}
+			}
+		}
+		return modeloTabla;
+	}
+	public Date parseDate(String fecha){
+		DateFormat formato = DateFormat.getDateInstance(DateFormat.SHORT, localizacion);
+		try {
+			return formato.parse(fecha);
+		} catch (ParseException e) {
+			System.out.println("Error in data format " + e);
+		}
+		return null;
+	}
+
+	public Extra[] getExtras() {
+		return extras.toArray(new Extra[extras.size()]);
+	}
+
+	
+}

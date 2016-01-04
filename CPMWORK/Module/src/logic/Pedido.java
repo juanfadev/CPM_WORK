@@ -1,6 +1,7 @@
 package logic;
 
 import java.lang.reflect.Array;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -9,7 +10,6 @@ public class Pedido {
 	private long codigoPedido;
 	private int adults;
 	private int kids;
-	private int menores;
 	private long camDobInt;
 	private long camDobExt;
 	private long camFamInt;
@@ -23,33 +23,31 @@ public class Pedido {
 	private double precioDescuento;
 	private double precioFinal;
 	private ArrayList<Room> rooms;
+	private String date;
 
 	public Pedido() {
 		codigoPedido = new Random().nextLong();
-		extras= new ArrayList<>();
-		rooms=new ArrayList<>();
+		extras = new ArrayList<>();
+		rooms = new ArrayList<>();
 	}
 
 	public boolean personasCorrectas() {
-		if (kids<camasExtra){
+		if (kids < camasExtra) {
 			return false;
 		}
-		int kids= this.kids - camasExtra;
+		int kids = this.kids - camasExtra;
 		long totalPeople = camDobExt * 2 + camDobInt * 2 + camFamExt * 5 + camFamInt * 5;
-		
-		if ((adults+kids) <= totalPeople) {
+
+		if ((adults + kids) <= totalPeople) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	public double precioCamarotes() {
-		Ship barco = crucero.getBarco();
-		precioCamarotes = (barco.getPrecioCamDobExt() * camDobExt) + (barco.getPrecioCamDobInt() * camDobInt)
-				+ (barco.getPrecioCamFamExt() * camFamExt) + (barco.getPrecioCamFamInt() * camFamInt);
+	public double calcularPrecioCamarotes() {
+		precioCamarotes= precioCamarotes*crucero.getDuration();
 		return precioCamarotes;
-
 	}
 
 	public double precioExtras() {
@@ -58,14 +56,19 @@ public class Pedido {
 		}
 		return precioExtras;
 	}
-	
-	public double precioDescuento(){
-		if (crucero.isDescuento()){
-			return precioCamarotes*0.15;
-		}
-		else {
+
+	public double precioDescuento() {
+		if (crucero.isDescuento()) {
+			precioDescuento = precioCamarotes * Catalog.descuento;
+			return precioDescuento;
+		} else {
 			return 0;
 		}
+	}
+	
+	public double precioFinal(){
+		precioFinal=calcularPrecioCamarotes()-precioDescuento()+precioExtras();
+		return precioFinal;
 	}
 
 	public void addExtra(Extra extra) {
@@ -74,14 +77,6 @@ public class Pedido {
 
 	public void removeExtra(Extra extra) {
 		extras.remove(extra);
-	}
-
-	public int getMenores() {
-		return menores;
-	}
-
-	public void setMenores(int menores) {
-		this.menores = menores;
 	}
 
 	public long getCamDobInt() {
@@ -143,54 +138,99 @@ public class Pedido {
 	public long getCodigoPedido() {
 		return codigoPedido;
 	}
-	public void addRoom(Room room){
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
+	public void addRoom(Room room) {
 		rooms.add(room);
-		if (room.getCam()==1){
+		Ship barco= crucero.getBarco();
+		if (room.getCam() == 1) {
 			camDobInt++;
-		}
-		else if (room.getCam()==2) {
+			precioCamarotes+=barco.getPrecioCamDobInt()*(room.getAdults()+room.getKids());
+		} else if (room.getCam() == 2) {
 			camDobExt++;
-		}
-		else if (room.getCam()==3) {
+			precioCamarotes+=barco.getPrecioCamDobExt()*(room.getAdults()+room.getKids());
+		} else if (room.getCam() == 3) {
 			camFamInt++;
-		}
-		else if (room.getCam()==4){
+			precioCamarotes+=barco.getPrecioCamFamInt()*(room.getAdults()+room.getKids());
+		} else if (room.getCam() == 4) {
 			camFamExt++;
+			precioCamarotes+=barco.getPrecioCamFamExt()*(room.getAdults()+room.getKids());
 		}
-		if (room.isCamaExtra()){
+		if (room.isCamaExtra()) {
 			camasExtra++;
 		}
-		adults=adults+room.getAdults();
-		kids=kids+room.getKids();
+		adults = adults + room.getAdults();
+		kids = kids + room.getKids();
 		extras.addAll(room.getExtras());
-		
+
 	}
-	public void removeRoom(int index){
-		Room room=rooms.remove(index);
-		if (room.getCam()==1){
+
+	public void removeRoom(int index) {
+		Room room = rooms.remove(index);
+		Ship barco= crucero.getBarco();
+		if (room.getCam() == 1) {
 			camDobInt--;
-		}
-		else if (room.getCam()==2) {
+			precioCamarotes-=barco.getPrecioCamDobInt()*(room.getAdults()+room.getKids());
+		} else if (room.getCam() == 2) {
 			camDobExt--;
-		}
-		else if (room.getCam()==3) {
+			precioCamarotes-=barco.getPrecioCamDobExt()*(room.getAdults()+room.getKids());
+		} else if (room.getCam() == 3) {
 			camFamInt--;
+			precioCamarotes-=barco.getPrecioCamFamInt()*(room.getAdults()+room.getKids());
+		} else if (room.getCam() == 4) {
+			camFamExt--;			
+			precioCamarotes-=barco.getPrecioCamFamExt()*(room.getAdults()+room.getKids());
 		}
-		else if (room.getCam()==4){
-			camFamExt--;
-		}
-		if (room.isCamaExtra()){
+		if (room.isCamaExtra()) {
 			camasExtra--;
 		}
-		adults=adults-room.getAdults();
-		kids=kids-room.getKids();
+		adults = adults - room.getAdults();
+		kids = kids - room.getKids();
 		extras.removeAll(room.getExtras());
-		
 	}
 
 	public ArrayList<Room> getRooms() {
 		return rooms;
 	}
-	
-	
+
+	public String toString() {
+		precioFinal();
+		String string = "NOMBRE: " + usuario.getName() + "  NIF: " + usuario.getID() + "   TEL: "
+				+ usuario.getPhoneNumber() + System.lineSeparator();
+		string += System.lineSeparator();
+		string += "**DATOS DEL CRUCERO**" + System.lineSeparator();
+		string += "Crucero: " + crucero.getDenominacion() + System.lineSeparator();
+		string += "Barco: " + crucero.getBarco() + System.lineSeparator();
+		string += "Fecha de salida: " + date + System.lineSeparator();
+		string += "Días: " + crucero.getDuration() + System.lineSeparator();
+		string += "Salida: " + crucero.getPuertoSalida() + System.lineSeparator();
+		string += "N. Pasajeros: " + (adults + kids) + System.lineSeparator();
+		string += "Camarotes: ";
+		for (Room r : rooms) {
+			string += r.toString();
+		}
+		string += System.lineSeparator() + System.lineSeparator();
+		string += "** PAGADO RESERVA **" + System.lineSeparator();
+		string += "Camarotes: " + System.lineSeparator();
+		string += precioCamarotes + System.lineSeparator();
+		string += "Extras: " + System.lineSeparator();
+		string += precioExtras + System.lineSeparator();
+		if (precioDescuento > 0) {
+			string += "Descuento Oferta: " + System.lineSeparator();
+			string += precioDescuento + System.lineSeparator();
+		}
+		string += "Importe Total: " + System.lineSeparator();
+		string += precioFinal + System.lineSeparator();
+
+		return string;
+
+	}
+
 }
