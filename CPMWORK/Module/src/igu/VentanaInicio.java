@@ -72,6 +72,7 @@ import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.BoxLayout;
 import javax.swing.JTextPane;
 import java.awt.Font;
+import javax.swing.JSeparator;
 
 public class VentanaInicio extends JFrame {
 
@@ -108,7 +109,6 @@ public class VentanaInicio extends JFrame {
 	private JMenu mnFile;
 	private JMenu mnEdit;
 	private JMenu mnHelp;
-	private JMenuItem menuItem;
 	private JCheckBoxMenuItem chckbxmntmTooltips;
 	private JMenuItem mntmRestart;
 	private JTabbedPane tpDetails;
@@ -184,6 +184,14 @@ public class VentanaInicio extends JFrame {
 	private JLabel lblBookingSucceed;
 	private JScrollPane spPedido;
 	private JTextPane txpnPedidoInfo;
+	private JMenuItem mntmHelpSupport;
+	private JSeparator separator;
+	private JMenuItem mntmAbout;
+	private JSeparator separator_1;
+	private JMenuItem mntmExit;
+	private AccionOffer offer1;
+	private AccionOffer offer2;
+
 
 	/**
 	 * Launch the application.
@@ -207,6 +215,8 @@ public class VentanaInicio extends JFrame {
 	public VentanaInicio() {
 		catalogo = new Catalog(localizacion);
 		pedido = new Pedido();
+		offer1=new AccionOffer();
+		offer2= new AccionOffer();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 712, 380);
 		setJMenuBar(getMenuBar_1());
@@ -236,6 +246,7 @@ public class VentanaInicio extends JFrame {
 	private JToggleButton getTglbtnHome() {
 		if (tglbtnHome == null) {
 			tglbtnHome = new JToggleButton("Home");
+			tglbtnHome.setToolTipText("Up to 15% Discount in some cruises");
 			tglbtnHome.setMnemonic('h');
 			tglbtnHome.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
@@ -251,6 +262,7 @@ public class VentanaInicio extends JFrame {
 	private JToggleButton getTglbtnRooms() {
 		if (tglbtnRooms == null) {
 			tglbtnRooms = new JToggleButton("Rooms");
+			tglbtnRooms.setToolTipText("Add people and rooms");
 			tglbtnRooms.setEnabled(false);
 			tglbtnRooms.setMnemonic('r');
 			tglbtnRooms.addActionListener(new ActionListener() {
@@ -266,6 +278,7 @@ public class VentanaInicio extends JFrame {
 	private JToggleButton getTglbtnPersonalData() {
 		if (tglbtnPersonalData == null) {
 			tglbtnPersonalData = new JToggleButton("Personal Data");
+			tglbtnPersonalData.setToolTipText("Introduce your personal data");
 			tglbtnPersonalData.setEnabled(false);
 			tglbtnPersonalData.setMnemonic('e');
 			tglbtnPersonalData.addActionListener(new ActionListener() {
@@ -281,6 +294,7 @@ public class VentanaInicio extends JFrame {
 	private JToggleButton getTglbtnConfirmation() {
 		if (tglbtnConfirmation == null) {
 			tglbtnConfirmation = new JToggleButton("Confirmation");
+			tglbtnConfirmation.setToolTipText("Confirm booking details");
 			tglbtnConfirmation.setEnabled(false);
 			tglbtnConfirmation.setMnemonic('c');
 			tglbtnConfirmation.addActionListener(new ActionListener() {
@@ -313,6 +327,7 @@ public class VentanaInicio extends JFrame {
 	private JToggleButton getTglbtnSearch() {
 		if (tglbtnSearch == null) {
 			tglbtnSearch = new JToggleButton("Search");
+			tglbtnSearch.setToolTipText("Search your cruise");
 			tglbtnSearch.setEnabled(false);
 			tglbtnSearch.setMnemonic('s');
 			tglbtnSearch.addActionListener(new ActionListener() {
@@ -467,52 +482,41 @@ public class VentanaInicio extends JFrame {
 		Cruise[] cruceros = catalogo.selectDescuento();
 		getBtnOffer1().setIcon(new ImageIcon(VentanaInicio.class.getResource(cruceros[0].getImgRoute())));
 		getBtnOffer2().setIcon(new ImageIcon(VentanaInicio.class.getResource(cruceros[1].getImgRoute())));
-		getBtnOffer1().addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				crucero = cruceros[0];
-				String[] dates = new String[crucero.getFechasSalida().length];
-				int i = 0;
-				for (java.util.Date d : crucero.getFechasSalida()) {
-					dates[i] = DateFormat.getDateInstance(DateFormat.SHORT, localizacion).format(d);
-					i++;
-				}
-				String date = (String) JOptionPane.showInputDialog(null, "Select the Date: ", "Date selection",
-						JOptionPane.PLAIN_MESSAGE, null, dates, dates[0]);
-				if (date != null) {
-					loadDetails(date);
-					((CardLayout) pnCentral.getLayout()).show(pnCentral, "panelDetails");
-					pedido.setCrucero(crucero);
-					pedido.setDate(date);
-					getLblPicture().setIcon(new ImageIcon(VentanaInicio.class.getResource(crucero.getImgRoute())));
-				}
-			}
-		});
-		;
-		getBtnOffer2().addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				crucero = cruceros[1];
-				String[] dates = new String[crucero.getFechasSalida().length];
-				int i = 0;
-				for (java.util.Date d : crucero.getFechasSalida()) {
-					dates[i] = DateFormat.getDateInstance(DateFormat.SHORT, localizacion).format(d);
-					i++;
-				}
-				String date = (String) JOptionPane.showInputDialog(null, "Select the Date: ", "Date selection",
-						JOptionPane.PLAIN_MESSAGE, null, dates, dates[0]);
-				if (date != null) {
-					loadDetails(date);
-					((CardLayout) pnCentral.getLayout()).show(pnCentral, "panelDetails");
-					pedido.setCrucero(crucero);
-					pedido.setDate(date);
-					getLblPicture().setIcon(new ImageIcon(VentanaInicio.class.getResource(crucero.getImgRoute())));
-				}
-			}
-		});
-		;
+		offer1.setCrucero(cruceros[0]);
+		offer2.setCrucero(cruceros[1]);
 	}
+	private class AccionOffer implements ActionListener{
+
+		private Cruise crucero;
+		
+		
+		public void setCrucero(Cruise crucero) {
+			this.crucero = crucero;
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String[] dates = new String[crucero.getFechasSalida().length];
+			int i = 0;
+			for (java.util.Date d : crucero.getFechasSalida()) {
+				dates[i] = DateFormat.getDateInstance(DateFormat.SHORT, localizacion).format(d);
+				i++;
+			}
+			String date = (String) JOptionPane.showInputDialog(null, "Select the Date: ", "Date selection",
+					JOptionPane.PLAIN_MESSAGE, null, dates, dates[0]);
+			if (date != null) {
+				VentanaInicio.this.crucero=crucero;
+				loadDetails(date);
+				((CardLayout) pnCentral.getLayout()).show(pnCentral, "panelDetails");
+				pedido.setCrucero(crucero);
+				pedido.setDate(date);
+				getLblPicture().setIcon(new ImageIcon(VentanaInicio.class.getResource(crucero.getImgRoute())));
+				
+			}
+			
+		}
+		
+	}
+	
 
 	public void clearTextFields(Container container) {
 		for (Component c : container.getComponents()) {
@@ -609,6 +613,7 @@ public class VentanaInicio extends JFrame {
 	private JTextField getTxtDateFrom() {
 		if (txtDateFrom == null) {
 			txtDateFrom = new JTextField();
+			txtDateFrom.setToolTipText("Format DD/MM/YYYY");
 			txtDateFrom.setColumns(10);
 		}
 		return txtDateFrom;
@@ -624,6 +629,7 @@ public class VentanaInicio extends JFrame {
 	private JTextField getTxtDateTo() {
 		if (txtDateTo == null) {
 			txtDateTo = new JTextField();
+			txtDateTo.setToolTipText("Format DD/MM/YYYY");
 			txtDateTo.setColumns(10);
 		}
 		return txtDateTo;
@@ -639,6 +645,7 @@ public class VentanaInicio extends JFrame {
 	private JComboBox getCbDest() {
 		if (cbDest == null) {
 			cbDest = new JComboBox();
+			cbDest.setToolTipText("Select a region");
 			cbDest.setModel(new DefaultComboBoxModel(catalogo.getZonas().toArray()));
 		}
 		return cbDest;
@@ -647,6 +654,7 @@ public class VentanaInicio extends JFrame {
 	private JButton getBtnSearch() {
 		if (btnSearch == null) {
 			btnSearch = new JButton("Search");
+			btnSearch.setToolTipText("Get results");
 			btnSearch.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					try {
@@ -666,6 +674,7 @@ public class VentanaInicio extends JFrame {
 	private JButton getBtnDetails() {
 		if (btnDetails == null) {
 			btnDetails = new JButton("Details");
+			btnDetails.setToolTipText("See details of the selected cruise");
 			btnDetails.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					int row = tCruises.getSelectedRow();
@@ -701,6 +710,8 @@ public class VentanaInicio extends JFrame {
 			mnFile = new JMenu("File");
 			mnFile.setMnemonic('f');
 			mnFile.add(getMntmRestart());
+			mnFile.add(getSeparator_1());
+			mnFile.add(getMntmExit());
 		}
 		return mnFile;
 	}
@@ -710,7 +721,6 @@ public class VentanaInicio extends JFrame {
 			mnEdit = new JMenu("Edit");
 			mnEdit.setMnemonic('d');
 			mnEdit.add(getChckbxmntmTooltips());
-			mnEdit.add(getMenuItem());
 		}
 		return mnEdit;
 	}
@@ -719,20 +729,17 @@ public class VentanaInicio extends JFrame {
 		if (mnHelp == null) {
 			mnHelp = new JMenu("Help");
 			mnHelp.setMnemonic('h');
+			mnHelp.add(getMntmHelpSupport());
+			mnHelp.add(getSeparator());
+			mnHelp.add(getMntmAbout());
 		}
 		return mnHelp;
-	}
-
-	private JMenuItem getMenuItem() {
-		if (menuItem == null) {
-			menuItem = new JMenuItem("New menu item");
-		}
-		return menuItem;
 	}
 
 	private JCheckBoxMenuItem getChckbxmntmTooltips() {
 		if (chckbxmntmTooltips == null) {
 			chckbxmntmTooltips = new JCheckBoxMenuItem("Tooltips");
+			chckbxmntmTooltips.setToolTipText("If tooltips are annoying to you, although they are useful, you can disable them here.");
 			chckbxmntmTooltips.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent arg0) {
 					if (chckbxmntmTooltips.isSelected()) {
@@ -752,6 +759,7 @@ public class VentanaInicio extends JFrame {
 	private JMenuItem getMntmRestart() {
 		if (mntmRestart == null) {
 			mntmRestart = new JMenuItem("Restart");
+			mntmRestart.setToolTipText("Restart the booking");
 			mntmRestart.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					restart();
@@ -804,6 +812,7 @@ public class VentanaInicio extends JFrame {
 	private JButton getBtnBook() {
 		if (btnBook == null) {
 			btnBook = new JButton("Book Now");
+			btnBook.setToolTipText("Select rooms and people");
 			btnBook.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					getTglbtnRooms().setEnabled(true);
@@ -984,6 +993,7 @@ public class VentanaInicio extends JFrame {
 		if (btnAddRoom == null) {
 			VentanaInicio vI = this;
 			btnAddRoom = new JButton("AddRoom");
+			btnAddRoom.setToolTipText("Add a Room to the booking");
 			btnAddRoom.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					vAR = new VentanaAddRoom(vI, crucero);
@@ -999,6 +1009,7 @@ public class VentanaInicio extends JFrame {
 	private JButton getBtnRemove() {
 		if (btnRemove == null) {
 			btnRemove = new JButton("Remove");
+			btnRemove.setToolTipText("Remove the selected room from the booking");
 			btnRemove.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					pedido.removeRoom(tRooms.getSelectedRow());
@@ -1045,6 +1056,7 @@ public class VentanaInicio extends JFrame {
 	private JButton getBtnSearch_1() {
 		if (btnSearch_1 == null) {
 			btnSearch_1 = new JButton("");
+			btnSearch_1.setToolTipText("Search a Cruise");
 			btnSearch_1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					getTglbtnSearch().setEnabled(true);
@@ -1114,6 +1126,7 @@ public class VentanaInicio extends JFrame {
 	private JButton getBtnRegister() {
 		if (btnRegister == null) {
 			btnRegister = new JButton("Register");
+			btnRegister.setToolTipText("Register a user with the above credentials");
 			btnRegister.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					if (getTxID().getText().isEmpty() || getTxName().getText().isEmpty()
@@ -1135,6 +1148,7 @@ public class VentanaInicio extends JFrame {
 	private JButton getBtnNext_1() {
 		if (btnNext_1 == null) {
 			btnNext_1 = new JButton("Next->");
+			btnNext_1.setToolTipText("Continue the booking, to introduce your personal data.");
 			btnNext_1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					if (modeloRooms.getRowCount() > 0) {
@@ -1286,6 +1300,7 @@ public class VentanaInicio extends JFrame {
 	private JButton getBtnLogIn() {
 		if (btnLogIn == null) {
 			btnLogIn = new JButton("Log In");
+			btnLogIn.setToolTipText("Log In if you are a registered user.");
 			btnLogIn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Usuario user = register.getUser(getTxIDLogin().getText(), getPasswordLogIn().getPassword());
@@ -1405,6 +1420,7 @@ public class VentanaInicio extends JFrame {
 	private JButton getBtnContinueWithoutRegistering() {
 		if (btnContinueWithoutRegistering == null) {
 			btnContinueWithoutRegistering = new JButton("Continue Without Registering");
+			btnContinueWithoutRegistering.setToolTipText("Book your cruise without registering (password not not needed)");
 			btnContinueWithoutRegistering.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					if (getTxID().getText().isEmpty() || getTxName().getText().isEmpty()
@@ -1525,13 +1541,16 @@ public class VentanaInicio extends JFrame {
 	private JButton getBtnOffer1() {
 		if (btnOffer1 == null) {
 			btnOffer1 = new JButton("");
-		}
+			btnOffer1.setToolTipText("First Offer with a 15% Discount");
+			btnOffer1.addActionListener(offer1);		}
 		return btnOffer1;
 	}
 
 	private JButton getBtnOffer2() {
 		if (btnOffer2 == null) {
 			btnOffer2 = new JButton("");
+			btnOffer2.setToolTipText("Second Offer with a 15% Discount");
+			btnOffer2.addActionListener(offer2);	
 		}
 		return btnOffer2;
 	}
@@ -1539,6 +1558,7 @@ public class VentanaInicio extends JFrame {
 	private JButton getBtnConfirm() {
 		if (btnConfirm == null) {
 			btnConfirm = new JButton("Confirm");
+			btnConfirm.setToolTipText("If all information above is good, click here to confirm your booking.");
 			btnConfirm.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					getTglbtnPayout().setEnabled(true);
@@ -1552,6 +1572,7 @@ public class VentanaInicio extends JFrame {
 	private JButton getBtnSaveReceipt() {
 		if (btnSaveReceipt == null) {
 			btnSaveReceipt = new JButton("Save Receipt");
+			btnSaveReceipt.setToolTipText("Save the receipt of your booking");
 			btnSaveReceipt.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					saveDatabases();
@@ -1566,6 +1587,7 @@ public class VentanaInicio extends JFrame {
 	private JButton getBtnCancelBooking() {
 		if (btnCancelBooking == null) {
 			btnCancelBooking = new JButton("Cancel Booking");
+			btnCancelBooking.setToolTipText("Cancel the booking you have just done");
 			btnCancelBooking.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					restart();
@@ -1608,5 +1630,40 @@ public class VentanaInicio extends JFrame {
 			txpnPedidoInfo = new JTextPane();
 		}
 		return txpnPedidoInfo;
+	}
+	private JMenuItem getMntmHelpSupport() {
+		if (mntmHelpSupport == null) {
+			mntmHelpSupport = new JMenuItem("Help Support");
+			mntmHelpSupport.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
+			mntmHelpSupport.setToolTipText("If you need help about the application, click here.");
+		}
+		return mntmHelpSupport;
+	}
+	private JSeparator getSeparator() {
+		if (separator == null) {
+			separator = new JSeparator();
+		}
+		return separator;
+	}
+	private JMenuItem getMntmAbout() {
+		if (mntmAbout == null) {
+			mntmAbout = new JMenuItem("About");
+			mntmAbout.setToolTipText("Information about the application and the developer.");
+		}
+		return mntmAbout;
+	}
+	private JSeparator getSeparator_1() {
+		if (separator_1 == null) {
+			separator_1 = new JSeparator();
+		}
+		return separator_1;
+	}
+	private JMenuItem getMntmExit() {
+		if (mntmExit == null) {
+			mntmExit = new JMenuItem("Exit");
+			mntmExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0));
+			mntmExit.setToolTipText("Exit the application");
+		}
+		return mntmExit;
 	}
 }

@@ -77,7 +77,7 @@ public class VentanaAddRoom extends JDialog {
 		room = new Room();
 		setResizable(false);
 		setTitle("Add Room");
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 489, 326);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -93,7 +93,7 @@ public class VentanaAddRoom extends JDialog {
 	private JComboBox getCbExtras() {
 		if (cbExtras == null) {
 			cbExtras = new JComboBox();
-			cbExtras.setBounds(10, 29, 104, 20);
+			cbExtras.setBounds(10, 29, 115, 20);
 			cbExtras.setModel(new DefaultComboBoxModel(vI.getCatalogo().getExtras()));
 		}
 		return cbExtras;
@@ -102,7 +102,7 @@ public class VentanaAddRoom extends JDialog {
 	private JScrollPane getSpExtras() {
 		if (spExtras == null) {
 			spExtras = new JScrollPane();
-			spExtras.setBounds(119, 11, 104, 117);
+			spExtras.setBounds(152, 11, 115, 117);
 			spExtras.setViewportView(getListaExtras());
 		}
 		return spExtras;
@@ -120,7 +120,7 @@ public class VentanaAddRoom extends JDialog {
 		if (pnExtras == null) {
 			pnExtras = new JPanel();
 			pnExtras.setBorder(new TitledBorder(null, "Extras: ", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			pnExtras.setBounds(20, 88, 247, 139);
+			pnExtras.setBounds(28, 110, 277, 137);
 			pnExtras.setLayout(null);
 			pnExtras.add(getCbExtras());
 			pnExtras.add(getSpExtras());
@@ -133,6 +133,7 @@ public class VentanaAddRoom extends JDialog {
 	private JButton getBtnAddExtra() {
 		if (btnAddExtra == null) {
 			btnAddExtra = new JButton("Add Extra");
+			btnAddExtra.setToolTipText("Add the extra above");
 			btnAddExtra.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					Extra extra = (Extra) cbExtras.getSelectedItem();
@@ -142,7 +143,7 @@ public class VentanaAddRoom extends JDialog {
 					}
 				}
 			});
-			btnAddExtra.setBounds(10, 79, 104, 23);
+			btnAddExtra.setBounds(10, 79, 115, 23);
 		}
 		return btnAddExtra;
 	}
@@ -152,7 +153,7 @@ public class VentanaAddRoom extends JDialog {
 			pnRoom = new JPanel();
 			pnRoom.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Room: ",
 					TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-			pnRoom.setBounds(20, 11, 247, 76);
+			pnRoom.setBounds(20, 11, 285, 88);
 			pnRoom.setLayout(null);
 			pnRoom.add(getLblTypeOfRoom());
 			pnRoom.add(getRdbtnDouble());
@@ -183,9 +184,10 @@ public class VentanaAddRoom extends JDialog {
 	private JRadioButton getRdbtnDouble() {
 		if (rdbtnDouble == null) {
 			rdbtnDouble = new JRadioButton("Double");
+			rdbtnDouble.setToolTipText("2 People Room");
 			rdbtnDouble.setSelected(true);
 			btnGroupType.add(rdbtnDouble);
-			rdbtnDouble.setBounds(93, 16, 59, 23);
+			rdbtnDouble.setBounds(93, 16, 87, 23);
 		}
 		return rdbtnDouble;
 	}
@@ -193,8 +195,9 @@ public class VentanaAddRoom extends JDialog {
 	private JRadioButton getRdbtnFamily() {
 		if (rdbtnFamily == null) {
 			rdbtnFamily = new JRadioButton("Family");
+			rdbtnFamily.setToolTipText("4 People Room");
 			btnGroupType.add(rdbtnFamily);
-			rdbtnFamily.setBounds(164, 16, 55, 23);
+			rdbtnFamily.setBounds(182, 16, 76, 23);
 		}
 		return rdbtnFamily;
 	}
@@ -202,9 +205,10 @@ public class VentanaAddRoom extends JDialog {
 	private JRadioButton getRdbtnInside() {
 		if (rdbtnInside == null) {
 			rdbtnInside = new JRadioButton("Inside");
+			rdbtnInside.setToolTipText("Inside Room");
 			rdbtnInside.setSelected(true);
 			btnGroupLocal.add(rdbtnInside);
-			rdbtnInside.setBounds(93, 42, 55, 23);
+			rdbtnInside.setBounds(93, 42, 87, 23);
 		}
 		return rdbtnInside;
 	}
@@ -212,8 +216,9 @@ public class VentanaAddRoom extends JDialog {
 	private JRadioButton getRdbtnOutside() {
 		if (rdbtnOutside == null) {
 			rdbtnOutside = new JRadioButton("Outside");
+			rdbtnOutside.setToolTipText("Outside Room");
 			btnGroupLocal.add(rdbtnOutside);
-			rdbtnOutside.setBounds(164, 41, 63, 23);
+			rdbtnOutside.setBounds(182, 42, 76, 23);
 		}
 		return rdbtnOutside;
 	}
@@ -221,6 +226,7 @@ public class VentanaAddRoom extends JDialog {
 	private JButton getBtnAdd() {
 		if (btnAdd == null) {
 			btnAdd = new JButton("Add");
+			btnAdd.setToolTipText("Add the room to the cruise");
 			btnAdd.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (modeloPeople.isEmpty()) {
@@ -246,7 +252,7 @@ public class VentanaAddRoom extends JDialog {
 					}
 				}
 			});
-			btnAdd.setBounds(261, 238, 70, 23);
+			btnAdd.setBounds(305, 263, 70, 23);
 		}
 		return btnAdd;
 	}
@@ -254,7 +260,14 @@ public class VentanaAddRoom extends JDialog {
 	private JButton getBtnCancel() {
 		if (btnCancel == null) {
 			btnCancel = new JButton("Cancel");
-			btnCancel.setBounds(341, 238, 75, 23);
+			btnCancel.setToolTipText("Cancel room add");
+			VentanaAddRoom ventanaAddRoom=this;
+			btnCancel.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					ventanaAddRoom.dispose();
+				}
+			});
+			btnCancel.setBounds(385, 263, 75, 23);
 		}
 		return btnCancel;
 	}
@@ -263,7 +276,7 @@ public class VentanaAddRoom extends JDialog {
 		if (pnPeople == null) {
 			pnPeople = new JPanel();
 			pnPeople.setBorder(new TitledBorder(null, "People", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			pnPeople.setBounds(277, 11, 145, 216);
+			pnPeople.setBounds(315, 11, 145, 236);
 			pnPeople.setLayout(null);
 			pnPeople.add(getSpPeople());
 			pnPeople.add(getTxAge());
@@ -277,7 +290,7 @@ public class VentanaAddRoom extends JDialog {
 	private JScrollPane getSpPeople() {
 		if (spPeople == null) {
 			spPeople = new JScrollPane();
-			spPeople.setBounds(10, 72, 125, 102);
+			spPeople.setBounds(10, 72, 125, 122);
 			spPeople.setViewportView(getListaPeople());
 		}
 		return spPeople;
@@ -303,6 +316,7 @@ public class VentanaAddRoom extends JDialog {
 	private JButton getBtnAdd_1() {
 		if (btnAdd_1 == null) {
 			btnAdd_1 = new JButton("Add");
+			btnAdd_1.setToolTipText("Add new person");
 			btnAdd_1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (!crucero.isAptoMenores() && (Integer.parseInt(txAge.getText()) < 16)) {
@@ -332,6 +346,7 @@ public class VentanaAddRoom extends JDialog {
 	private JButton getBtnRemove() {
 		if (btnRemove == null) {
 			btnRemove = new JButton("Remove");
+			btnRemove.setToolTipText("Remove selected person from room");
 			btnRemove.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Person person = (Person) listaPeople.getSelectedValue();
@@ -339,7 +354,7 @@ public class VentanaAddRoom extends JDialog {
 					room.removePeople(person);
 				}
 			});
-			btnRemove.setBounds(30, 185, 89, 20);
+			btnRemove.setBounds(29, 205, 89, 20);
 		}
 		return btnRemove;
 	}
@@ -347,6 +362,7 @@ public class VentanaAddRoom extends JDialog {
 	private JButton getBtnRemoveExtra() {
 		if (btnRemoveExtra == null) {
 			btnRemoveExtra = new JButton("Remove Extra");
+			btnRemoveExtra.setToolTipText("Remove the Extra from the list");
 			btnRemoveExtra.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Extra extra = (Extra) listaExtras.getSelectedValue();
@@ -354,7 +370,7 @@ public class VentanaAddRoom extends JDialog {
 					modeloLista.removeElement(extra);
 				}
 			});
-			btnRemoveExtra.setBounds(10, 105, 104, 23);
+			btnRemoveExtra.setBounds(10, 105, 115, 23);
 		}
 		return btnRemoveExtra;
 	}
