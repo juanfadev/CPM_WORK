@@ -170,18 +170,17 @@ public class Catalog {
 			throws ParseException {
 		DateFormat formato = DateFormat.getDateInstance(DateFormat.SHORT, localizacion);
 		Date inicial=new Date(0);
-		Date fin= new Date(Long.MAX_VALUE);
-		if (start.equals("")){
-			inicial= new Date (0);
+		if (start==""){
+			Date inicial= new Date (0);
 		}
 		else {
-			inicial = formato.parse(start);
+			Date inicial = formato.parse(start);
 		}
-		if (end.equals("")){
-			fin= new Date(Long.MAX_VALUE);
+		if (end==""){
+			Date fin= new Date(Long.MAX_VALUE);
 		}
 		else{
-			fin = formato.parse(end);
+			Date fin = formato.parse(end);
 		}
 		Object[] nuevaFila = new Object[6];
 		for (Cruise c : cruises) {

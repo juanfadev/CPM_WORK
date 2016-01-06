@@ -171,13 +171,13 @@ public class Catalog {
 		DateFormat formato = DateFormat.getDateInstance(DateFormat.SHORT, localizacion);
 		Date inicial=new Date(0);
 		Date fin= new Date(Long.MAX_VALUE);
-		if (start.equals("")){
+		if (start==""){
 			inicial= new Date (0);
 		}
 		else {
 			inicial = formato.parse(start);
 		}
-		if (end.equals("")){
+		if (end==""){
 			fin= new Date(Long.MAX_VALUE);
 		}
 		else{

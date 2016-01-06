@@ -450,7 +450,7 @@ public class VentanaInicio extends JFrame {
 		} else {
 			pedido.removeRoom(pedido.getRooms().size() - 1);
 			JOptionPane.showMessageDialog(null,
-					"Arrangement of the room is not valid. Please make sure there are people under 16 using extra beds, and there is not too much people in the room");
+					"There are too much people for this room. Please rearrange it before continue");
 		}
 	}
 
@@ -471,12 +471,7 @@ public class VentanaInicio extends JFrame {
 				nuevaFila[0] = "Family";
 				nuevaFila[1] = "Interior";
 			}
-			if (r.getExtras().isEmpty()){
-				nuevaFila[2]="";
-			}
-			else {
-				nuevaFila[2] = r.getExtras();
-			}
+			nuevaFila[2] = r.getExtras();
 			modeloRooms.addRow(nuevaFila);
 		}
 		modeloRooms.fireTableDataChanged();
@@ -550,13 +545,8 @@ public class VentanaInicio extends JFrame {
 	
 	public void rotateImage(){
 		if (getBtnPicture().getIcon().equals(cruiseIcon)){
-			try {
-				shipIcon=new ImageIcon(VentanaInicio.class.getResource(crucero.getBarco().getImgRoute()));
-				getBtnPicture().setIcon(shipIcon);
-			} catch (Exception e) {
-				JOptionPane.showMessageDialog(null, "Ship Image not available");
-			}
-			
+			shipIcon=cruiseIcon=new ImageIcon(VentanaInicio.class.getResource(crucero.getBarco().getImgRoute()));
+			getBtnPicture().setIcon(shipIcon);
 		}
 		else if (getBtnPicture().getIcon().equals(shipIcon)) {
 			getBtnPicture().setIcon(cruiseIcon);
@@ -718,8 +708,7 @@ public class VentanaInicio extends JFrame {
 					((CardLayout) pnCentral.getLayout()).show(pnCentral, "panelDetails");
 					pedido.setCrucero(crucero);
 					pedido.setDate(date);
-					cruiseIcon=new ImageIcon(VentanaInicio.class.getResource(crucero.getImgRoute()));
-					getBtnPicture().setIcon(cruiseIcon);
+					getBtnPicture().setIcon(new ImageIcon(VentanaInicio.class.getResource(crucero.getImgRoute())));
 
 				}
 
@@ -931,7 +920,6 @@ public class VentanaInicio extends JFrame {
 	private JTextArea getTaDescripcion() {
 		if (taDescripcion == null) {
 			taDescripcion = new JTextArea();
-			taDescripcion.setEditable(false);
 			taDescripcion.setLineWrap(true);
 			taDescripcion.setWrapStyleWord(true);
 		}
@@ -1686,7 +1674,6 @@ public class VentanaInicio extends JFrame {
 	private JButton getBtnPicture() {
 		if (btnPicture == null) {
 			btnPicture = new JButton("");
-			btnPicture.setToolTipText("Click to show next image");
 			btnPicture.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					rotateImage();

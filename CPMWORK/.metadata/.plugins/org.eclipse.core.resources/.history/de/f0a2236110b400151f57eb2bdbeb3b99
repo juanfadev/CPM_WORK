@@ -475,6 +475,7 @@ public class VentanaInicio extends JFrame {
 				nuevaFila[2]="";
 			}
 			else {
+
 				nuevaFila[2] = r.getExtras();
 			}
 			modeloRooms.addRow(nuevaFila);

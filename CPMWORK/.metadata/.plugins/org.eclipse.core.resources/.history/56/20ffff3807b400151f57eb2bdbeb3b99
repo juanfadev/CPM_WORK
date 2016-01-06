@@ -13,6 +13,12 @@ public class ModeloNoEditable extends DefaultTableModel {
 
 	public ModeloNoEditable(Object[] columnNames, int rowCount) {
 		super(columnNames, rowCount);
+		// TODO Auto-generated constructor stub
+	}
+
+	public ModeloNoEditable(Vector data, Vector columnNames) {
+		super(data, columnNames);
+		// TODO Auto-generated constructor stub
 	}
 
 }

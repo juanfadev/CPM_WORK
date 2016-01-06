@@ -17,11 +17,11 @@ public class Catalog {
 	private ArrayList<Cruise> cruises;
 	private ArrayList<Ship> ships;
 	private ArrayList<Extra> extras;
-	public static final double descuento = 0.15;
+	public static final double descuento=0.15;
 	private ArrayList<String> zonas;
 	private Locale localizacion;
 
-	public Catalog(Locale localizacion) throws IOException {
+	public Catalog(Locale localizacion) {
 		this.localizacion = localizacion;
 		cruises = new ArrayList<>();
 		ships = new ArrayList<>();
@@ -31,7 +31,11 @@ public class Catalog {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-		start();
+		try {
+			start();
+		} catch (IOException e) {
+			System.out.print("Database could not be loaded. ERROR: " + e);
+		}
 	}
 
 	public void start() throws IOException {
@@ -140,23 +144,24 @@ public class Catalog {
 
 	}
 
-	public Cruise[] selectDescuento() {
+
+	public Cruise[] selectDescuento(){
 		Random random = new Random();
-		int rand1 = random.nextInt(cruises.size());
-		int rand2 = random.nextInt(cruises.size());
-		while (rand1 == rand2) {
-			rand2 = random.nextInt(cruises.size());
+		int rand1=random.nextInt(cruises.size());
+		int rand2= random.nextInt(cruises.size());
+		while (rand1==rand2) {
+			rand2=random.nextInt(cruises.size());
 		}
 		int[] pos = { rand1, rand2 };
-		Cruise[] cruisesDescuento = new Cruise[2];
-		for (int i = 0; i < cruises.size(); i++) {
-			if (i == pos[0]) {
+		Cruise[] cruisesDescuento=new Cruise[2];
+		for (int i=0;i<cruises.size();i++){
+			if (i==pos[0]){
 				cruises.get(i).setDescuento(true);
-				cruisesDescuento[0] = cruises.get(i);
+				cruisesDescuento[0]=cruises.get(i);
 			}
-			if (i == pos[1]) {
+			if (i==pos[1]){
 				cruises.get(i).setDescuento(true);
-				cruisesDescuento[1] = cruises.get(i);
+				cruisesDescuento[1]=cruises.get(i);
 			}
 		}
 		return cruisesDescuento;
@@ -166,23 +171,10 @@ public class Catalog {
 		return zonas;
 	}
 
-	public ModeloNoEditable searchZonaDate(String start, String end, String zona, ModeloNoEditable modeloTabla)
-			throws ParseException {
+	public ModeloNoEditable searchZonaDate(String start, String end, String zona, ModeloNoEditable modeloTabla) throws ParseException {
 		DateFormat formato = DateFormat.getDateInstance(DateFormat.SHORT, localizacion);
-		Date inicial=new Date(0);
-		Date fin= new Date(Long.MAX_VALUE);
-		if (start.equals("")){
-			inicial= new Date (0);
-		}
-		else {
-			inicial = formato.parse(start);
-		}
-		if (end.equals("")){
-			fin= new Date(Long.MAX_VALUE);
-		}
-		else{
-			fin = formato.parse(end);
-		}
+		Date inicial = formato.parse(start);
+		Date fin = formato.parse(end);
 		Object[] nuevaFila = new Object[6];
 		for (Cruise c : cruises) {
 			if (c.getZona().equals(zona)) {
@@ -201,8 +193,7 @@ public class Catalog {
 		}
 		return modeloTabla;
 	}
-
-	public Date parseDate(String fecha) {
+	public Date parseDate(String fecha){
 		DateFormat formato = DateFormat.getDateInstance(DateFormat.SHORT, localizacion);
 		try {
 			return formato.parse(fecha);
@@ -211,9 +202,11 @@ public class Catalog {
 		}
 		return null;
 	}
+	
 
 	public Extra[] getExtras() {
 		return extras.toArray(new Extra[extras.size()]);
 	}
 
+	
 }

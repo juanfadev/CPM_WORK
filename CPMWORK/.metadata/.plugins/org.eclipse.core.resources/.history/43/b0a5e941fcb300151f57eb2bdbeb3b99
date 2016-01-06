@@ -21,7 +21,7 @@ public class Catalog {
 	private ArrayList<String> zonas;
 	private Locale localizacion;
 
-	public Catalog(Locale localizacion) throws IOException {
+	public Catalog(Locale localizacion) {
 		this.localizacion = localizacion;
 		cruises = new ArrayList<>();
 		ships = new ArrayList<>();
@@ -169,20 +169,8 @@ public class Catalog {
 	public ModeloNoEditable searchZonaDate(String start, String end, String zona, ModeloNoEditable modeloTabla)
 			throws ParseException {
 		DateFormat formato = DateFormat.getDateInstance(DateFormat.SHORT, localizacion);
-		Date inicial=new Date(0);
-		Date fin= new Date(Long.MAX_VALUE);
-		if (start.equals("")){
-			inicial= new Date (0);
-		}
-		else {
-			inicial = formato.parse(start);
-		}
-		if (end.equals("")){
-			fin= new Date(Long.MAX_VALUE);
-		}
-		else{
-			fin = formato.parse(end);
-		}
+		Date inicial = formato.parse(start);
+		Date fin = formato.parse(end);
 		Object[] nuevaFila = new Object[6];
 		for (Cruise c : cruises) {
 			if (c.getZona().equals(zona)) {

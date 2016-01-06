@@ -11,8 +11,10 @@ public class ModeloNoEditable extends DefaultTableModel {
 		return false;
 	}
 
-	public ModeloNoEditable(Object[] columnNames, int rowCount) {
-		super(columnNames, rowCount);
+
+	public ModeloNoEditable(Vector data, Vector columnNames) {
+		super(data, columnNames);
+		// TODO Auto-generated constructor stub
 	}
 
 }

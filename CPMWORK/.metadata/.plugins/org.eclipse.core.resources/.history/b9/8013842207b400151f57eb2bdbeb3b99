@@ -11,8 +11,9 @@ public class ModeloNoEditable extends DefaultTableModel {
 		return false;
 	}
 
-	public ModeloNoEditable(Object[] columnNames, int rowCount) {
-		super(columnNames, rowCount);
+
+	public ModeloNoEditable(Object[][] data, Object[] columnNames) {
+		super(data, columnNames);
 	}
 
 }

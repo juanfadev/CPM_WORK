@@ -119,6 +119,9 @@ public class VentanaInicio extends JFrame {
 	private ModeloNoEditable modeloTabla;
 	private JButton btnBook;
 	private JScrollPane scCruises;
+	private JButton btnPrev;
+	private JButton btnNext;
+	private JLabel lblPicture;
 	private JLabel lblDenominacion;
 	private JLabel lblZona;
 	private JLabel lblSalida;
@@ -188,9 +191,6 @@ public class VentanaInicio extends JFrame {
 	private JMenuItem mntmExit;
 	private AccionOffer offer1;
 	private AccionOffer offer2;
-	private JButton btnPicture;
-	private ImageIcon cruiseIcon;
-	private ImageIcon shipIcon;
 
 
 	/**
@@ -213,12 +213,7 @@ public class VentanaInicio extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaInicio() {
-		try{
-			catalogo = new Catalog(localizacion);
-		}
-		catch(Exception e){
-			JOptionPane.showMessageDialog(null, "Database could not be loaded");
-		}
+		catalogo = new Catalog(localizacion);
 		pedido = new Pedido();
 		offer1=new AccionOffer();
 		offer2= new AccionOffer();
@@ -377,12 +372,7 @@ public class VentanaInicio extends JFrame {
 	private void restart() {
 		setOffers();
 		tglbtnHome.doClick();
-		try {
-			catalogo = new Catalog(localizacion);
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Database not inialized ");
-		}
-		
+		catalogo = new Catalog(localizacion);
 		pedido = new Pedido();
 		modeloRooms.getDataVector().clear();
 		modeloTabla.getDataVector().clear();
@@ -450,7 +440,7 @@ public class VentanaInicio extends JFrame {
 		} else {
 			pedido.removeRoom(pedido.getRooms().size() - 1);
 			JOptionPane.showMessageDialog(null,
-					"Arrangement of the room is not valid. Please make sure there are people under 16 using extra beds, and there is not too much people in the room");
+					"There are too much people for this room. Please rearrange it before continue");
 		}
 	}
 
@@ -471,12 +461,7 @@ public class VentanaInicio extends JFrame {
 				nuevaFila[0] = "Family";
 				nuevaFila[1] = "Interior";
 			}
-			if (r.getExtras().isEmpty()){
-				nuevaFila[2]="";
-			}
-			else {
-				nuevaFila[2] = r.getExtras();
-			}
+			nuevaFila[2] = r.getExtras();
 			modeloRooms.addRow(nuevaFila);
 		}
 		modeloRooms.fireTableDataChanged();
@@ -524,8 +509,7 @@ public class VentanaInicio extends JFrame {
 				((CardLayout) pnCentral.getLayout()).show(pnCentral, "panelDetails");
 				pedido.setCrucero(crucero);
 				pedido.setDate(date);
-				cruiseIcon=new ImageIcon(VentanaInicio.class.getResource(crucero.getImgRoute()));
-				getBtnPicture().setIcon(cruiseIcon);
+				getLblPicture().setIcon(new ImageIcon(VentanaInicio.class.getResource(crucero.getImgRoute())));
 				
 			}
 			
@@ -546,22 +530,6 @@ public class VentanaInicio extends JFrame {
 			}else if (c instanceof Container)
 				clearTextFields((Container) c);
 		}
-	}
-	
-	public void rotateImage(){
-		if (getBtnPicture().getIcon().equals(cruiseIcon)){
-			try {
-				shipIcon=new ImageIcon(VentanaInicio.class.getResource(crucero.getBarco().getImgRoute()));
-				getBtnPicture().setIcon(shipIcon);
-			} catch (Exception e) {
-				JOptionPane.showMessageDialog(null, "Ship Image not available");
-			}
-			
-		}
-		else if (getBtnPicture().getIcon().equals(shipIcon)) {
-			getBtnPicture().setIcon(cruiseIcon);
-		}
-		
 	}
 
 	/*
@@ -689,15 +657,19 @@ public class VentanaInicio extends JFrame {
 			btnSearch.setToolTipText("Get results");
 			btnSearch.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
+					try {
 						modeloTabla.getDataVector().clear();
 						try {
 							modeloTabla = catalogo.searchZonaDate(getTxtDateFrom().getText(), getTxtDateTo().getText(),
 									getCbDest().getSelectedItem().toString(), modeloTabla);
 						} catch (Exception e) {
-							JOptionPane.showMessageDialog(null, "Dates are not valid, please try again");
+							// TODO: handle exception
 						}
 						
 						modeloTabla.fireTableDataChanged();
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
 				}
 			});
 		}
@@ -718,8 +690,7 @@ public class VentanaInicio extends JFrame {
 					((CardLayout) pnCentral.getLayout()).show(pnCentral, "panelDetails");
 					pedido.setCrucero(crucero);
 					pedido.setDate(date);
-					cruiseIcon=new ImageIcon(VentanaInicio.class.getResource(crucero.getImgRoute()));
-					getBtnPicture().setIcon(cruiseIcon);
+					getLblPicture().setIcon(new ImageIcon(VentanaInicio.class.getResource(crucero.getImgRoute())));
 
 				}
 
@@ -817,7 +788,9 @@ public class VentanaInicio extends JFrame {
 		if (pnPictures == null) {
 			pnPictures = new JPanel();
 			pnPictures.setLayout(new BorderLayout(0, 0));
-			pnPictures.add(getBtnPicture(), BorderLayout.CENTER);
+			pnPictures.add(getBtnPrev(), BorderLayout.WEST);
+			pnPictures.add(getBtnNext(), BorderLayout.EAST);
+			pnPictures.add(getLblPicture(), BorderLayout.CENTER);
 		}
 		return pnPictures;
 	}
@@ -862,6 +835,27 @@ public class VentanaInicio extends JFrame {
 			scCruises.setViewportView(getTCruises());
 		}
 		return scCruises;
+	}
+
+	private JButton getBtnPrev() {
+		if (btnPrev == null) {
+			btnPrev = new JButton("Previous Image");
+		}
+		return btnPrev;
+	}
+
+	private JButton getBtnNext() {
+		if (btnNext == null) {
+			btnNext = new JButton("Next Image");
+		}
+		return btnNext;
+	}
+
+	private JLabel getLblPicture() {
+		if (lblPicture == null) {
+			lblPicture = new JLabel("");
+		}
+		return lblPicture;
 	}
 
 	private JLabel getLblDenominacion() {
@@ -931,7 +925,6 @@ public class VentanaInicio extends JFrame {
 	private JTextArea getTaDescripcion() {
 		if (taDescripcion == null) {
 			taDescripcion = new JTextArea();
-			taDescripcion.setEditable(false);
 			taDescripcion.setLineWrap(true);
 			taDescripcion.setWrapStyleWord(true);
 		}
@@ -1673,26 +1666,9 @@ public class VentanaInicio extends JFrame {
 	private JMenuItem getMntmExit() {
 		if (mntmExit == null) {
 			mntmExit = new JMenuItem("Exit");
-			mntmExit.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					System.exit(0);
-				}
-			});
 			mntmExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0));
 			mntmExit.setToolTipText("Exit the application");
 		}
 		return mntmExit;
-	}
-	private JButton getBtnPicture() {
-		if (btnPicture == null) {
-			btnPicture = new JButton("");
-			btnPicture.setToolTipText("Click to show next image");
-			btnPicture.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					rotateImage();
-				}
-			});
-		}
-		return btnPicture;
 	}
 }

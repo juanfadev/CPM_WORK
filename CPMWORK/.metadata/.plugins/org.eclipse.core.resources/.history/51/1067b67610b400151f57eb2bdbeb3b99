@@ -472,7 +472,7 @@ public class VentanaInicio extends JFrame {
 				nuevaFila[1] = "Interior";
 			}
 			if (r.getExtras().isEmpty()){
-				nuevaFila[2]="";
+				nuevaFila[2]="NO";
 			}
 			else {
 				nuevaFila[2] = r.getExtras();

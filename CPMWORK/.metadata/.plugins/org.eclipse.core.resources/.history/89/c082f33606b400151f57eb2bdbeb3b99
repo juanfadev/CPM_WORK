@@ -171,16 +171,10 @@ public class Catalog {
 		DateFormat formato = DateFormat.getDateInstance(DateFormat.SHORT, localizacion);
 		Date inicial=new Date(0);
 		Date fin= new Date(Long.MAX_VALUE);
-		if (start.equals("")){
-			inicial= new Date (0);
-		}
-		else {
+		if (start!="") {
 			inicial = formato.parse(start);
 		}
-		if (end.equals("")){
-			fin= new Date(Long.MAX_VALUE);
-		}
-		else{
+		if (end!=""){
 			fin = formato.parse(end);
 		}
 		Object[] nuevaFila = new Object[6];
