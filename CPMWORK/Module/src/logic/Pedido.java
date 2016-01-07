@@ -1,9 +1,17 @@
 package logic;
 
-import java.lang.reflect.Array;
-import java.sql.Date;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.Format;
 import java.util.ArrayList;
 import java.util.Random;
+
+import javax.swing.JOptionPane;
 
 public class Pedido {
 
@@ -31,9 +39,10 @@ public class Pedido {
 		rooms = new ArrayList<>();
 	}
 
-	public boolean personasCorrectas() {
+	public boolean personasCorrectas() throws Exception {
 		if (kids < camasExtra) {
-			return false;
+			throw new Exception("There are more extra beds than kids");
+			// return false;
 		}
 		int kids = this.kids - camasExtra;
 		long totalPeople = camDobExt * 2 + camDobInt * 2 + camFamExt * 5 + camFamInt * 5;
@@ -41,12 +50,13 @@ public class Pedido {
 		if ((adults + kids) <= totalPeople) {
 			return true;
 		} else {
-			return false;
+			throw new Exception("There are too many people in the room. Please rearrange it");
+			// return false;
 		}
 	}
 
 	public double calcularPrecioCamarotes() {
-		precioCamarotes= precioCamarotes*crucero.getDuration();
+		precioCamarotes = precioCamarotes * crucero.getDuration();
 		return precioCamarotes;
 	}
 
@@ -65,9 +75,9 @@ public class Pedido {
 			return 0;
 		}
 	}
-	
-	public double precioFinal(){
-		precioFinal=calcularPrecioCamarotes()-precioDescuento()+precioExtras();
+
+	public double precioFinal() {
+		precioFinal = calcularPrecioCamarotes() - precioDescuento() + precioExtras();
 		return precioFinal;
 	}
 
@@ -149,19 +159,19 @@ public class Pedido {
 
 	public void addRoom(Room room) {
 		rooms.add(room);
-		Ship barco= crucero.getBarco();
+		Ship barco = crucero.getBarco();
 		if (room.getCam() == 1) {
 			camDobInt++;
-			precioCamarotes+=barco.getPrecioCamDobInt()*(room.getAdults()+room.getKids());
+			precioCamarotes += barco.getPrecioCamDobInt() * (room.getAdults() + room.getKids());
 		} else if (room.getCam() == 2) {
 			camDobExt++;
-			precioCamarotes+=barco.getPrecioCamDobExt()*(room.getAdults()+room.getKids());
+			precioCamarotes += barco.getPrecioCamDobExt() * (room.getAdults() + room.getKids());
 		} else if (room.getCam() == 3) {
 			camFamInt++;
-			precioCamarotes+=barco.getPrecioCamFamInt()*(room.getAdults()+room.getKids());
+			precioCamarotes += barco.getPrecioCamFamInt() * (room.getAdults() + room.getKids());
 		} else if (room.getCam() == 4) {
 			camFamExt++;
-			precioCamarotes+=barco.getPrecioCamFamExt()*(room.getAdults()+room.getKids());
+			precioCamarotes += barco.getPrecioCamFamExt() * (room.getAdults() + room.getKids());
 		}
 		if (room.isCamaExtra()) {
 			camasExtra++;
@@ -174,19 +184,19 @@ public class Pedido {
 
 	public void removeRoom(int index) {
 		Room room = rooms.remove(index);
-		Ship barco= crucero.getBarco();
+		Ship barco = crucero.getBarco();
 		if (room.getCam() == 1) {
 			camDobInt--;
-			precioCamarotes-=barco.getPrecioCamDobInt()*(room.getAdults()+room.getKids());
+			precioCamarotes -= barco.getPrecioCamDobInt() * (room.getAdults() + room.getKids());
 		} else if (room.getCam() == 2) {
 			camDobExt--;
-			precioCamarotes-=barco.getPrecioCamDobExt()*(room.getAdults()+room.getKids());
+			precioCamarotes -= barco.getPrecioCamDobExt() * (room.getAdults() + room.getKids());
 		} else if (room.getCam() == 3) {
 			camFamInt--;
-			precioCamarotes-=barco.getPrecioCamFamInt()*(room.getAdults()+room.getKids());
+			precioCamarotes -= barco.getPrecioCamFamInt() * (room.getAdults() + room.getKids());
 		} else if (room.getCam() == 4) {
-			camFamExt--;			
-			precioCamarotes-=barco.getPrecioCamFamExt()*(room.getAdults()+room.getKids());
+			camFamExt--;
+			precioCamarotes -= barco.getPrecioCamFamExt() * (room.getAdults() + room.getKids());
 		}
 		if (room.isCamaExtra()) {
 			camasExtra--;
@@ -194,6 +204,18 @@ public class Pedido {
 		adults = adults - room.getAdults();
 		kids = kids - room.getKids();
 		extras.removeAll(room.getExtras());
+	}
+
+	public boolean checkAvailability() throws Exception {
+		int[] rooms = crucero.returnFree(date);
+		if (rooms[0] >= camDobInt && rooms[1] >= camDobExt && rooms[2] >= camFamInt && rooms[3] >= camFamExt) {
+			return true;
+		} else {
+			throw new Exception("There are not enough rooms available. There are only " + rooms[0] + " Dobule Interior "
+					+ rooms[1] + " Double Exterior " + rooms[2] + " Familiar Interior " + rooms[3]
+					+ "Familiar Exterior rooms" + System.lineSeparator()
+					+ "Please, delete some rooms or change your cruise.");
+		}
 	}
 
 	public ArrayList<Room> getRooms() {
@@ -233,4 +255,74 @@ public class Pedido {
 
 	}
 
+	private String bookingLine() {
+		String string = "";
+		string += crucero.getCodigoCrucero() + ";";
+		string += date + ";";
+		string += camDobInt + ";";
+		string += camDobExt + ";";
+		string += camFamInt + ";";
+		string += camFamExt;
+		return string;
+	}
+
+	public void savePedido() {
+		String nombreFichero = Catalog.cruisesCompleted;
+		ArrayList<String> lines = new ArrayList<>();
+		boolean inFile = false;
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(nombreFichero));
+			String line;
+			while ((line = reader.readLine()) != null) {
+				String[] tokens = line.split(";");
+				String[] lin = new String[6];
+				if (tokens[0].equals(crucero.getCodigoCrucero())) {
+					if (tokens[1].equals(date)) {
+						lin[0] = tokens[0];
+						lin[1] = tokens[1];
+						lin[2] = String.valueOf(Integer.parseInt(tokens[2]) + camDobInt);
+						lin[3] = String.valueOf(Integer.parseInt(tokens[3]) + camDobExt);
+						lin[4] = String.valueOf(Integer.parseInt(tokens[4]) + camFamInt);
+						lin[5] = String.valueOf(Integer.parseInt(tokens[5]) + camFamExt);
+						inFile = true;
+						String string = "";
+						for (int i = 0; i < lin.length; i++) {
+							if (i == lin.length - 1) {
+								string += lin[i];
+							} else {
+								string += lin[i];
+								string += ";";
+							}
+						}
+						lines.add(string);
+					} else {
+						lines.add(line);
+					}
+				} else {
+					lines.add(line);
+				}
+
+			}
+			reader.close();
+		} catch (FileNotFoundException fnfe) {
+			JOptionPane.showMessageDialog(null, "No cruises were booked previously");
+		} catch (IOException ioe) {
+			JOptionPane.showMessageDialog(null, "Input/Output error");
+		} finally {
+			if (!inFile) {
+				lines.add(bookingLine());
+			}
+			try {
+				BufferedWriter fichero = new BufferedWriter(new FileWriter(nombreFichero));
+				for (String l : lines) {
+					fichero.write(l + System.lineSeparator());
+				}
+				fichero.close();
+			} catch (FileNotFoundException fnfe) {
+				JOptionPane.showMessageDialog(null, "File couldn't be saved");
+			} catch (IOException ioe) {
+				JOptionPane.showMessageDialog(null, "Input/Output error");
+			}
+		}
+	}
 }

@@ -1,14 +1,16 @@
 package logic;
 
+import java.awt.Frame;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.SecureDirectoryStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
+
+import javax.swing.JOptionPane;
 
 import igu.ModeloNoEditable;
 
@@ -20,6 +22,10 @@ public class Catalog {
 	public static final double descuento = 0.15;
 	private ArrayList<String> zonas;
 	private Locale localizacion;
+	public final static File cruisesFile = new File("data/cruises.dat");
+	public final static File shipsFile = new File("data/ships.dat");
+	public final static File extrasFile = new File("data/extras.dat");
+	public final static String cruisesCompleted = "data/booked.dat";
 
 	public Catalog(Locale localizacion) throws IOException {
 		this.localizacion = localizacion;
@@ -35,12 +41,10 @@ public class Catalog {
 	}
 
 	public void start() throws IOException {
-		File cruises = new File("data/cruises.dat");
-		File ships = new File("data/ships.dat");
-		File extras = new File("data/extras.dat");
-		readShips(ships);
-		readCruises(cruises);
-		readExtras(extras);
+		readShips(shipsFile);
+		readCruises(cruisesFile);
+		readExtras(extrasFile);
+		readCruisesCompleted(cruisesCompleted);
 	}
 
 	private void readShips(File file) throws IOException {
@@ -87,22 +91,32 @@ public class Catalog {
 			int duration = Integer.parseInt(tokens[7]);
 			DateFormat formato = DateFormat.getDateInstance(DateFormat.SHORT, localizacion);
 			String[] fechasString = tokens[8].split("%");
-			ArrayList<Date> fechas = new ArrayList<>();
-			for (String fecha : fechasString) {
-				try {
-					fechas.add(formato.parse(fecha));
+			String [][] reservas= new String[fechasString.length][6];
+			Date[] fechasSalida= new Date[fechasString.length];
+			for (int i=0; i<fechasString.length;i++){
+				try{
+					fechasSalida[i]=formato.parse(fechasString[i]);
+					reservas[i][0]=codigoCrucero;
+					reservas[i][1]=formato.format(fechasSalida[i]);
+					reservas[i][2]="0";
+					reservas[i][3]="0";
+					reservas[i][4]="0";
+					reservas[i][5]="0";
 				} catch (ParseException e) {
 					System.out.print("Date format error " + e);
 				}
 			}
-			Date[] fechasSalida = new Date[fechas.size()];
-			fechas.toArray(fechasSalida);
 			String codigoBarco = tokens[9];
 			Ship barco = findBarco(codigoBarco);
 			Cruise crucero = new Cruise(codigoCrucero, zona, denominacion, puertoSalida, itinerario, descripcion,
-					aptoMenores, duration, fechasSalida, barco);
+					aptoMenores, duration, fechasSalida, barco, reservas);
+			if (crucero.getBarco().toString() == null) {
+				//System.out.print("The cruise " + crucero+ " has not a ship available");
+				//JOptionPane.showMessageDialog(null, "The cruise " + crucero + " has not a ship available");
+			} else {
+				cruises.add(crucero);
+			}
 
-			cruises.add(crucero);
 		}
 	}
 
@@ -115,6 +129,26 @@ public class Catalog {
 			double precio = Double.parseDouble(tokens[2]);
 			Extra extra = new Extra(codigoExtra, denominacion, precio);
 			extras.add(extra);
+		}
+	}
+	private void readCruisesCompleted(String filename) throws IOException{
+		File file=new File(filename);
+		if (file.exists()){
+			CatalogReader reader = new CatalogReader(file);
+			DateFormat formato = DateFormat.getDateInstance(DateFormat.SHORT, localizacion);
+			for (int index = 0; index < reader.getFileSize(); index++) {
+				String[] tokens= reader.processLine(index);
+				String codigoCrucero = tokens[0];
+				String date=tokens[1];
+				String camDobInt=(tokens[2]);
+				String camDobExt=(tokens[3]);
+				String camFamInt=(tokens[4]);
+				String camFamExt=(tokens[5]);
+				getCruiseByCode(codigoCrucero).addReserva(tokens);
+			}
+		}
+		else{
+			System.out.println("No cruises have been booked yet");
 		}
 	}
 
@@ -138,6 +172,15 @@ public class Catalog {
 		}
 		return null;
 
+	}
+	
+	public Cruise getCruiseByCode(String code){
+		for (Cruise c: cruises){
+			if (code.equals(c.getCodigoCrucero())){
+				return c;
+			}
+		}
+		return null;
 	}
 
 	public Cruise[] selectDescuento() {
@@ -169,18 +212,16 @@ public class Catalog {
 	public ModeloNoEditable searchZonaDate(String start, String end, String zona, ModeloNoEditable modeloTabla)
 			throws ParseException {
 		DateFormat formato = DateFormat.getDateInstance(DateFormat.SHORT, localizacion);
-		Date inicial=new Date(0);
-		Date fin= new Date(Long.MAX_VALUE);
-		if (start.equals("")){
-			inicial= new Date (0);
-		}
-		else {
+		Date inicial = new Date(0);
+		Date fin = new Date(Long.MAX_VALUE);
+		if (start.equals("")) {
+			inicial = new Date(0);
+		} else {
 			inicial = formato.parse(start);
 		}
-		if (end.equals("")){
-			fin= new Date(Long.MAX_VALUE);
-		}
-		else{
+		if (end.equals("")) {
+			fin = new Date(Long.MAX_VALUE);
+		} else {
 			fin = formato.parse(end);
 		}
 		Object[] nuevaFila = new Object[6];

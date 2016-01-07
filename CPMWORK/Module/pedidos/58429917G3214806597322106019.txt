@@ -1,0 +1,20 @@
+NOMBRE: Fran  NIF: 58429917G   TEL: 655872131
+
+**DATOS DEL CRUCERO**
+Crucero: Mediterráneo histórico
+Barco: Pacific Princess II
+Fecha de salida: 15/11/15
+Días: 7
+Salida: Barcelona
+N. Pasajeros: 2
+Camarotes: Camarote Doble Interior / ;Camarote Doble Exterior / ;
+
+** PAGADO RESERVA **
+Camarotes: 
+5145.0
+Extras: 
+0.0
+Descuento Oferta: 
+771.75
+Importe Total: 
+4373.25

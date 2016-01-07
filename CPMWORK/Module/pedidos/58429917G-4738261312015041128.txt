@@ -1,0 +1,20 @@
+NOMBRE: Fran  NIF: 58429917G   TEL: 655872131
+
+**DATOS DEL CRUCERO**
+Crucero: Caribe occidental
+Barco: New Horizon
+Fecha de salida: 15/11/15
+Días: 6
+Salida: Tampa
+N. Pasajeros: 1
+Camarotes: Camarote Doble Interior / ;
+
+** PAGADO RESERVA **
+Camarotes: 
+1440.0
+Extras: 
+0.0
+Descuento Oferta: 
+216.0
+Importe Total: 
+1224.0
