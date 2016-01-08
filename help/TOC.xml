@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<!DOCTYPE toc
+  PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp TOC Version 1.0//EN"
+         "http://java.sun.com/products/javahelp/toc_1_0.dtd">
+
+<toc version="1.0">
+  
+  <tocitem text="EII Cruceros" target="intro" />
+  <tocitem text="Search" target="search" />
+  <tocitem text="Details">
+  <tocitem text="Pictures" target="pictures" />
+  <tocitem text="Information" target="info" />
+  </tocitem>
+  <tocitem text="Rooms">
+  <tocitem text="Room View" target="roomview" />
+  <tocitem text="Add Room" target="addroom" />
+  </tocitem>
+  <tocitem text="Personal Information">
+  <tocitem text="Register" target="register" />
+  <tocitem text="LogIn" target="login" />
+  </tocitem>
+  <tocitem text="Confirmation" target="confirmation" />
+  <tocitem text="Payout" target="payout" />
+
+</toc>

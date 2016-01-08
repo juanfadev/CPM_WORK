@@ -38,12 +38,15 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
 import java.text.DateFormat;
 import java.awt.event.InputEvent;
 import javax.swing.JTabbedPane;
+import javax.help.HelpSet;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
@@ -58,6 +61,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextPane;
 import java.awt.Font;
 import javax.swing.JSeparator;
+import javax.help.*;
 
 public class VentanaInicio extends JFrame {
 
@@ -197,6 +201,7 @@ public class VentanaInicio extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaInicio() {
+		setTitle("EII Cruises");
 		try {
 			catalogo = new Catalog(localizacion);
 		} catch (Exception e) {
@@ -215,6 +220,7 @@ public class VentanaInicio extends JFrame {
 		pnPrincipal.add(getPnPasos(), BorderLayout.NORTH);
 		pnPrincipal.add(getPnCentral(), BorderLayout.CENTER);
 		restart();
+		cargaAyuda();
 	}
 
 	private JPanel getPnPasos() {
@@ -268,7 +274,7 @@ public class VentanaInicio extends JFrame {
 			tglbtnPersonalData = new JToggleButton("Personal Data");
 			tglbtnPersonalData.setToolTipText("Introduce your personal data");
 			tglbtnPersonalData.setEnabled(false);
-			tglbtnPersonalData.setMnemonic('e');
+			tglbtnPersonalData.setMnemonic('p');
 			tglbtnPersonalData.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					toggleAllButtons(tglbtnPersonalData);
@@ -301,7 +307,7 @@ public class VentanaInicio extends JFrame {
 		if (tglbtnPayout == null) {
 			tglbtnPayout = new JToggleButton("Payout");
 			tglbtnPayout.setEnabled(false);
-			tglbtnPayout.setMnemonic('p');
+			tglbtnPayout.setMnemonic('y');
 			tglbtnPayout.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					toggleAllButtons(tglbtnPayout);
@@ -554,7 +560,41 @@ public class VentanaInicio extends JFrame {
 		}
 
 	}
+	
+	  private void cargaAyuda(){
 
+		     URL hsURL;
+		     HelpSet hs;
+
+		     try {
+		  	    File fichero = new File("help/Ayuda.hs");
+		  	    hsURL = fichero.toURI().toURL();
+		  	    hs = new HelpSet(null, hsURL);
+		  }
+
+		      catch (Exception e){
+		        System.out.println("Ayuda no encontrada");
+		       return;
+		     }
+
+		     HelpBroker hb = hs.createHelpBroker();
+		     hb.initPresentation();
+
+		     hb.enableHelpKey(this.getContentPane(),"intro", hs);
+		     hb.enableHelpOnButton(mntmHelpSupport, "intro", hs);
+		     hb.enableHelp(pnHome, "intro", hs);
+		     hb.enableHelp(pnSearch, "search", hs);
+		     hb.enableHelp(pnPictures, "pictures", hs);
+		     hb.enableHelp(pnInfo, "info", hs);
+		     hb.enableHelp(pnRooms, "roomview", hs);
+		     hb.enableHelp(btnAddRoom, "addroom", hs);
+		     hb.enableHelp(pnRegister, "register", hs);
+		     hb.enableHelp(pnLogIn, "login", hs);
+		     hb.enableHelp(pnPersonalButtons, "register", hs);
+		     hb.enableHelp(pnConfirmation, "confirmation", hs);
+		     hb.enableHelp(pnPayout, "payout", hs);
+		     
+		   }
 	/*
 	 * 
 	 */
@@ -1647,7 +1687,7 @@ public class VentanaInicio extends JFrame {
 	private JMenuItem getMntmHelpSupport() {
 		if (mntmHelpSupport == null) {
 			mntmHelpSupport = new JMenuItem("Help Support");
-			mntmHelpSupport.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
+			mntmHelpSupport.setMnemonic('s');
 			mntmHelpSupport.setToolTipText("If you need help about the application, click here.");
 		}
 		return mntmHelpSupport;
